@@ -1,0 +1,219 @@
+/* =============================================================
+   BIOS TECH — theme.css (bezpečná vrstva)
+   Jen barvy, fonty, tlačítka. Žádné zásahy do layoutu šablony.
+   ============================================================= */
+/* =============================================================
+   BIOS TECH — Shoptet template override
+   Pravidlo 60-30-10: 60 % neutrály · 30 % černá · 10 % hrášková
+   ============================================================= */
+
+:root {
+  /* Brand colors */
+  --bt-black: #1A1A1A;
+  --bt-anthracite: #2D3138;
+  --bt-anthracite-soft: #3A3F47;
+  --bt-chrome: #C7CACE;
+  --bt-chrome-soft: #E6E8EB;
+  --bt-pea: #8BC53F;           /* hrášková zelená */
+  --bt-pea-bright: #9FD650;
+  --bt-pea-deep: #6FA02C;
+  --bt-white: #FFFFFF;
+  --bt-paper: #F6F7F8;
+  --bt-paper-warm: #F1F2F0;
+  --bt-line: #E3E5E7;
+  --bt-line-dark: #2A2D32;
+
+  /* ACE sub-brand */
+  --ace-orange: #FF6A1F;
+  --ace-orange-deep: #E5560F;
+
+  /* Override Shoptet template variables */
+  --color-primary: var(--bt-black);
+  --color-primary-h: 0;
+  --color-primary-s: 0%;
+  --color-primary-l: 10%;
+  --color-primary-hover: var(--bt-anthracite);
+  --color-secondary: var(--bt-pea);
+  --color-secondary-hover: var(--bt-pea-deep);
+  --color-tertiary: var(--bt-anthracite);
+  --color-header-background: var(--bt-white);
+  --template-font: "Montserrat", "Inter", system-ui, sans-serif;
+  --template-headings-font: "Montserrat", "Inter", system-ui, sans-serif;
+
+  /* Typography scale */
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-18: 18px;
+  --fs-22: 22px;
+  --fs-28: 28px;
+  --fs-36: 36px;
+  --fs-48: 48px;
+  --fs-64: 64px;
+  --fs-88: 88px;
+
+  /* Spacing */
+  --sp-2: 2px;
+  --sp-4: 4px;
+  --sp-8: 8px;
+  --sp-12: 12px;
+  --sp-16: 16px;
+  --sp-20: 20px;
+  --sp-24: 24px;
+  --sp-32: 32px;
+  --sp-40: 40px;
+  --sp-56: 56px;
+  --sp-80: 80px;
+  --sp-120: 120px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 14px;
+  --radius-xl: 24px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: var(--template-font);
+  font-size: 15px;
+  line-height: 1.55;
+  color: var(--bt-black);
+  background: var(--bt-white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body { font-feature-settings: "ss01" 1, "cv11" 1; }
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--bt-pea-deep); }
+
+button { font-family: inherit; cursor: pointer; }
+
+img { display: block; max-width: 100%; }
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--template-headings-font);
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  margin: 0;
+  line-height: 1.05;
+  text-wrap: balance;
+}
+
+/* globální reset <p> odstraněn */
+
+/* .container override odstraněn — nechá se šablonový */
+
+/* =============================================================
+   LOGO — Bios TECH wordmark with pea-green dot
+   ============================================================= */
+
+.bt-logo {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 2px;
+  font-family: var(--template-headings-font);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  font-size: 26px;
+  line-height: 1;
+  color: var(--bt-black);
+  position: relative;
+}
+.bt-logo .bt-logo-bios {
+  font-weight: 800;
+  font-size: 1em;
+  position: relative;
+  padding-right: 2px;
+}
+.bt-logo .bt-logo-bios::after {
+  content: "";
+  position: absolute;
+  top: -3px;
+  left: 7px;
+  width: 6px;
+  height: 6px;
+  background: var(--bt-pea);
+  border-radius: 50%;
+}
+.bt-logo .bt-logo-tech {
+  font-weight: 800;
+  font-size: 0.95em;
+  letter-spacing: 0.04em;
+  margin-left: 4px;
+}
+.bt-logo.bt-logo-on-dark { color: var(--bt-white); }
+
+.bt-logo-lg { font-size: 44px; }
+.bt-logo-lg .bt-logo-bios::after { top: -5px; left: 11px; width: 9px; height: 9px; }
+
+/* =============================================================
+   GLOBAL BUTTON OVERRIDES (Shoptet)
+   ============================================================= */
+
+.btn, .button, button.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--bt-black);
+  color: var(--bt-white);
+  border: 0;
+  border-radius: 100px;
+  padding: 14px 24px;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: var(--fs-14);
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  transition: background .15s, transform .1s, box-shadow .15s;
+  text-decoration: none;
+}
+.btn:hover, .button:hover, button.btn:hover {
+  background: var(--bt-anthracite);
+  color: var(--bt-white);
+}
+.btn.btn-primary, .btn-conversion, .add-to-cart-button, .next-step .btn {
+  background: var(--bt-black);
+  color: var(--bt-white);
+}
+.btn.btn-primary:hover, .btn-conversion:hover, .add-to-cart-button:hover {
+  background: var(--bt-anthracite);
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--bt-black);
+  border: 1px solid var(--bt-black);
+}
+.btn-ghost:hover { background: var(--bt-black); color: var(--bt-white); }
+.btn-pea {
+  background: var(--bt-pea);
+  color: var(--bt-black);
+}
+.btn-pea:hover { background: var(--bt-pea-bright); color: var(--bt-black); }
+.btn-sm { padding: 9px 16px; font-size: 13px; }
+.btn-lg { padding: 18px 32px; font-size: 15px; }
+
+.btn .arrow {
+  width: 18px; height: 18px;
+  display: inline-block;
+  position: relative;
+}
+.btn .arrow::after {
+  content: "→";
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform .2s;
+}
+.btn:hover .arrow::after { transform: translateX(3px); }
+
