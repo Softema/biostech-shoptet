@@ -1,1 +1,0 @@
-# biostech-shoptet
