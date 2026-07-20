@@ -1234,3 +1234,20 @@
   margin-left: -50vw;
   margin-right: -50vw;
 }
+
+/* =============================================================
+   HERO GRID FIX
+   Hero blok používá obecnou třídu "container", kterou Shoptet
+   sám styluje a přebíjí náš 2-sloupcový grid (text vlevo,
+   traktor vpravo). Cílená oprava jen pro náš hero, nedotýká se
+   ostatních .container na stránce (menu, patička...).
+   ============================================================= */
+.bt-scope .hero-split > .container {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr !important;
+}
+@media (max-width: 900px) {
+  .bt-scope .hero-split > .container {
+    grid-template-columns: 1fr !important;
+  }
+}
