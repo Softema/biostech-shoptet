@@ -1251,3 +1251,17 @@
     grid-template-columns: 1fr !important;
   }
 }
+
+/* =============================================================
+   HERO CLEARFIX FIX
+   Shoptet ma na .container globalni Bootstrap clearfix
+   (.container::before/::after { content:" "; display:table }).
+   Jakmile na .container prepneme display:grid, prohlizec ty
+   neviditelne pseudo-elementy zacne pocitat jako skutecne grid
+   polozky -> posune obsah o jednu bunku. Zrusit jen pro nas hero.
+   ============================================================= */
+.bt-scope .hero-split > .container::before,
+.bt-scope .hero-split > .container::after {
+  content: none;
+  display: none;
+}
