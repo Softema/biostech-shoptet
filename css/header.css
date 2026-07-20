@@ -125,59 +125,34 @@
   align-items: center;
   gap: 8px;
 }
-.btn-icon-circle {
-  width: 44px;
-  height: 44px;
-  border-radius: 50%;
-  background: var(--bt-paper);
-  border: 1px solid var(--bt-line);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--bt-black);
-  position: relative;
-  transition: background .15s, border-color .15s;
-}
-.btn-icon-circle:hover { background: var(--bt-white); border-color: var(--bt-black); }
-.btn-icon-circle .badge {
-  position: absolute;
-  top: -2px;
-  right: -2px;
-  min-width: 18px;
-  height: 18px;
-  background: var(--bt-pea);
-  color: var(--bt-black);
-  font-size: 11px;
-  font-weight: 700;
-  border-radius: 100px;
-  padding: 0 5px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-.btn-cart-wide {
+/* Skutečná třída košíku v Disco šabloně je .cart-count (ne vymyšlené
+   .btn-cart-wide z návrhu) — cílíme na reálný element. */
+#header .navigation-buttons a.cart-count {
   display: inline-flex;
   align-items: center;
   gap: 10px;
   background: var(--bt-black);
-  color: var(--bt-white);
+  color: var(--bt-white) !important;
   border-radius: 100px;
   height: 44px;
-  padding: 0 18px 0 14px;
+  padding: 0 18px 0 16px;
   font-weight: 600;
   font-size: var(--fs-13);
   letter-spacing: 0.02em;
   border: 0;
+  text-decoration: none;
 }
-.btn-cart-wide:hover { background: var(--bt-anthracite); color: var(--bt-white); }
-.btn-cart-wide .cart-amount {
+#header .navigation-buttons a.cart-count:hover { background: var(--bt-anthracite); }
+#header .navigation-buttons a.cart-count .cart-price {
+  color: inherit;
+}
+#header .navigation-buttons a.cart-count::before {
+  content: "";
+  width: 18px; height: 18px;
+  display: inline-block;
   background: var(--bt-pea);
-  color: var(--bt-black);
-  border-radius: 100px;
-  font-size: 11px;
-  font-weight: 700;
-  padding: 2px 7px;
-  margin-left: 4px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
 /* Main nav */
@@ -242,3 +217,37 @@
 }
 #navigation .nav-extra a:hover { color: var(--bt-black); }
 
+
+/* =============================================================
+   LOGO — vkládá se přes global.js (viz bt-logo)
+   ============================================================= */
+.bt-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+.bt-logo__mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: var(--bt-black);
+  position: relative;
+  flex-shrink: 0;
+}
+.bt-logo__mark::after {
+  content: "";
+  position: absolute;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -55%);
+  width: 12px; height: 12px;
+  border-radius: 50%;
+  background: var(--bt-pea);
+}
+.bt-logo__text {
+  font-size: 21px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--bt-black);
+}
+.bt-logo__accent { color: var(--bt-pea); }
