@@ -219,35 +219,12 @@
 
 
 /* =============================================================
-   LOGO — vkládá se přes global.js (viz bt-logo)
+   LOGO — skutecny soubor, vklada se pres global.js
    ============================================================= */
-.bt-logo {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  text-decoration: none;
+.bt-logo-img {
+  display: block;
+  height: 40px;
+  width: auto;
+  max-width: 180px;
+  object-fit: contain;
 }
-.bt-logo__mark {
-  width: 28px;
-  height: 28px;
-  border-radius: 8px;
-  background: var(--bt-black);
-  position: relative;
-  flex-shrink: 0;
-}
-.bt-logo__mark::after {
-  content: "";
-  position: absolute;
-  left: 50%; top: 50%;
-  transform: translate(-50%, -55%);
-  width: 12px; height: 12px;
-  border-radius: 50%;
-  background: var(--bt-pea);
-}
-.bt-logo__text {
-  font-size: 21px;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: var(--bt-black);
-}
-.bt-logo__accent { color: var(--bt-pea); }
