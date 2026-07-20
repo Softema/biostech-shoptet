@@ -6,7 +6,7 @@
 (function () {
   'use strict';
 
-  var LOGO_URL = 'https://cdn.jsdelivr.net/gh/Softema/biostech-shoptet@main/img/biostech-logo.png';
+  var LOGO_URL = 'https://cdn.jsdelivr.net/gh/Softema/biostech-shoptet@main/biostech-logo.png';
 
   function replaceLogo() {
     var siteName = document.querySelector('#header .site-name');
