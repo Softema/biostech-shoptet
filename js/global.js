@@ -1,11 +1,12 @@
 /* =============================================================
-/* =============================================================
    BIOS TECH — globální JS pro Shoptet
    Běží na KAŽDÉ stránce (na rozdíl od homepage.js).
-   Zatím: výměna loga v hlavičce za BiosTech wordmark.
+   Zatím: výměna loga v hlavičce za skutečné BiosTech logo.
    ============================================================= */
 (function () {
   'use strict';
+
+  var LOGO_URL = 'https://cdn.jsdelivr.net/gh/Softema/biostech-shoptet@main/img/biostech-logo.png';
 
   function replaceLogo() {
     var siteName = document.querySelector('#header .site-name');
@@ -14,11 +15,7 @@
     if (!link || link.dataset.btLogoDone) return;
 
     link.dataset.btLogoDone = 'true';
-    link.innerHTML =
-      '<span class="bt-logo">' +
-        '<span class="bt-logo__mark"></span>' +
-        '<span class="bt-logo__text">Bios<span class="bt-logo__accent">Tech</span></span>' +
-      '</span>';
+    link.innerHTML = '<img src="' + LOGO_URL + '" alt="BiosTech" class="bt-logo-img">';
   }
 
   if (document.readyState === 'loading') {
