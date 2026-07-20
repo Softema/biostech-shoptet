@@ -42,6 +42,7 @@
     style.textContent = [
       'body > *:not(#bt-homepage) .benefitBanner { display: none !important; }',
       '#carousel, .homepage-box, .homepage-group-title { display: none !important; }',
+      '.content-wrapper.container:not(#content-wrapper) { display: none !important; }',
       '#bt-homepage { display: block; }'
     ].join('\n');
     document.head.appendChild(style);
