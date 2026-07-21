@@ -1265,3 +1265,23 @@
   content: none;
   display: none;
 }
+
+
+/* =============================================================
+   DROBNÉ OPRAVY (v. odkazy+patička)
+   ============================================================= */
+/* Nadpisy M3 a ACE na tmavých kartách musí být bílé */
+.bt-scope .line-card.line-profi h3,
+.bt-scope .line-card.line-ace h3 {
+  color: var(--bt-white);
+}
+.bt-scope .line-card.line-profi .line-num,
+.bt-scope .line-card.line-ace .line-num {
+  color: rgba(255,255,255,0.7);
+}
+.bt-scope .line-card.line-ace .line-num { color: var(--bt-orange, #f47b20); }
+
+/* Štítek (Doporučujeme apod.) nesmí přetékat bublinu */
+.bt-scope .product-card .flag {
+  white-space: nowrap;
+}
