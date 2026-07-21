@@ -93,7 +93,11 @@
 
   function upgradeNav() {
     var menu = document.querySelector('#navigation .menu-level-1');
-    if (!menu || menu.querySelector('.bt-nav-right')) return;
+    if (!menu) return;
+    // (10) schovat Značky
+    var brands = menu.querySelector('a[data-testid="brandsText"]');
+    if (brands && brands.closest('li')) brands.closest('li').style.display = 'none';
+    if (menu.querySelector('.bt-nav-right')) return;
     var li1 = document.createElement('li');
     li1.className = 'bt-nav-right bt-nav-showroom';
     li1.innerHTML = '<a href="/showroom-stoky/"><b><span class="bt-dot"></span>Showroom Štoky</b></a>';
