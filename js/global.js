@@ -108,12 +108,52 @@
     menu.appendChild(li2);
   }
 
+
+  /* =============================================================
+     MENU OVERFLOW FIX — Shoptet presouva polozky, ktere se
+     "nevejdou", do dropdownu .menu-helper (checkMenuSize) a
+     znovu je tam strka pri kazdem resize. CSS je nevrati,
+     protoze uz nejsou primymi detmi .menu-level-1 — musime
+     je JS-em prestehovat zpatky a helper vypnout.
+     ============================================================= */
+  function fixMenuOverflow() {
+    var menu = document.querySelector('#navigation .menu-level-1');
+    if (!menu) return;
+    var helper = menu.querySelector('.menu-helper');
+    if (!helper) return;
+
+    var inner = helper.querySelector('ul');
+    // polozky vratit zpet do menu, pred nase prave polozky
+    var anchor = menu.querySelector('.bt-nav-right') || helper;
+    if (inner) {
+      while (inner.firstElementChild) {
+        menu.insertBefore(inner.firstElementChild, anchor);
+      }
+    }
+    helper.style.display = 'none';
+  }
+
+  function watchMenuOverflow() {
+    var menu = document.querySelector('#navigation .menu-level-1');
+    if (!menu) return;
+    fixMenuOverflow();
+    // Shoptet helper znovu plni pri kazdem resize -> hlidame a vracime
+    new MutationObserver(function () {
+      var inner = menu.querySelector('.menu-helper ul');
+      if (inner && inner.firstElementChild) fixMenuOverflow();
+    }).observe(menu, { childList: true, subtree: true });
+    window.addEventListener('resize', function () {
+      setTimeout(fixMenuOverflow, 100);
+    });
+  }
+
   function init() {
     replaceLogo();
     replaceFooter();
     upgradeTopBar();
     upgradeSearch();
     upgradeNav();
+    watchMenuOverflow();
   }
 
   if (document.readyState === 'loading') {
