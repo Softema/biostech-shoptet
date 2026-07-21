@@ -441,7 +441,11 @@
   margin-right: 0 !important;
 }
 #navigation .navigation-in.menu {
+  left: 0;
+  right: 0;
+  width: auto;
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 32px;
+  box-sizing: border-box;
 }
