@@ -228,3 +228,28 @@
   max-width: 180px;
   object-fit: contain;
 }
+
+/* =============================================================
+   TOP BAR — e-mail + doplnky vkladane pres global.js
+   ============================================================= */
+.top-navigation-bar .bt-topbar-email {
+  color: inherit;
+  margin-left: 16px;
+  text-decoration: none;
+}
+.top-navigation-bar .bt-topbar-email:hover { color: var(--bt-pea); }
+.top-navigation-bar .top-navigation-contacts { display: flex; align-items: center; gap: 10px; }
+
+/* =============================================================
+   MENU — prave polozky (Showroom Stoky, Testovaci jizda)
+   ============================================================= */
+#navigation .menu-level-1 { display: flex; align-items: center; }
+#navigation .menu-level-1 .bt-nav-right { margin-left: auto; }
+#navigation .bt-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--bt-pea);
+  margin-right: 7px;
+  vertical-align: middle;
+}
