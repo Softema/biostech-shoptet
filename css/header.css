@@ -260,3 +260,32 @@
   margin-right: 7px;
   vertical-align: middle;
 }
+
+/* =============================================================
+   MENU — oprava pozadi
+   Disco barvi pruh menu promennou --color-primary (u nas cerna
+   pro tlacitka) -> cely pruh zcernal. Prebijeme natvrdo bilou.
+   ============================================================= */
+#navigation,
+#navigation .navigation-in,
+#navigation .navigation-in.menu {
+  background: var(--bt-white) !important;
+}
+#navigation .menu-level-1 > li {
+  background: transparent !important;
+  border: 0 !important;
+}
+#navigation .menu-level-1 > li > a {
+  background: transparent !important;
+  color: var(--bt-black) !important;
+}
+
+/* =============================================================
+   TOP BAR — vypnout orezavani polozek (TESTOVACI JI...)
+   Shoptet meri sirku a schovava presahujici polozky do dropdownu;
+   po nasi vymene obsahu meri spatne. Vypneme trigger a helper.
+   ============================================================= */
+.top-navigation-menu-trigger,
+.top-navigation-bar-menu-helper { display: none !important; }
+.top-navigation-bar-menu li { white-space: nowrap; }
+.top-navigation-bar-menu li.cropped { display: inline-block !important; }
