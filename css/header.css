@@ -289,3 +289,99 @@
 .top-navigation-bar-menu-helper { display: none !important; }
 .top-navigation-bar-menu li { white-space: nowrap; }
 .top-navigation-bar-menu li.cropped { display: inline-block !important; }
+
+/* =============================================================
+   HEADER FIX BALIK v2 — 10 pripominek
+   ============================================================= */
+
+/* (1) mezera pod menu kategorii */
+#navigation { padding-bottom: 10px !important; }
+#navigation .menu-level-1 > li > a { padding-top: 20px; padding-bottom: 20px; }
+
+/* (2+6) top bar: vse na jedne rovine, jednotny vzhled */
+.top-navigation-bar { padding: 0 !important; }
+.top-navigation-bar .container {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start;
+  gap: 28px;
+  min-height: 48px;
+}
+.top-navigation-bar .container::before,
+.top-navigation-bar .container::after { content: none !important; display: none !important; }
+.top-navigation-contacts,
+.top-navigation-menu,
+.top-navigation-tools {
+  float: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  min-height: 0 !important;
+  height: auto !important;
+}
+.top-navigation-menu { flex: 1; justify-content: center; }
+
+/* (3) neorezavat polozky top menu */
+.top-navigation-bar-menu { display: flex !important; align-items: center; gap: 0; }
+.top-navigation-bar-menu li {
+  width: auto !important;
+  max-width: none !important;
+  overflow: visible !important;
+  border: 0 !important;
+  text-transform: none !important;
+}
+.top-navigation-bar-menu li a {
+  text-transform: none !important;
+  font-size: 13px;
+  letter-spacing: 0.01em;
+  padding: 6px 16px !important;
+  white-space: nowrap;
+}
+/* jemne oddelovace mezi polozkami */
+.top-navigation-bar-menu li + li { border-left: 1px solid rgba(255,255,255,0.12) !important; }
+
+/* (4) vetsi logo */
+.bt-logo-img { height: 56px !important; max-width: 240px !important; }
+
+/* (5) "Zakaznicka podpora:" nesmi byt schovana */
+.top-navigation-contacts strong {
+  display: inline !important;
+  color: var(--bt-white) !important;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+/* (7) schovat Prihlaseni v top baru */
+.top-navigation-tools .top-nav-button-login { display: none !important; }
+
+/* (8) HLEDAT tlacitko svisle na stred */
+#header .search form,
+#header .search fieldset {
+  display: flex !important;
+  align-items: center !important;
+  position: relative;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+#header .search .btn[data-testid="searchBtn"] {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  margin: 0;
+}
+
+/* (9) kosik: jedna rovina, bez zelene tecky kdyz je prazdny */
+#header .navigation-buttons { display: flex; align-items: center; }
+#header .navigation-buttons a.cart-count {
+  align-items: center !important;
+  line-height: 1 !important;
+  height: 48px;
+}
+#header .navigation-buttons a.cart-count::before { content: none !important; display: none !important; }
+#header .navigation-buttons a.cart-count .cart-price { display: inline-flex; align-items: center; }
+
+/* (10) schovat polozku Znacky v hlavnim menu */
+#navigation .menu-level-1 > li:has(> a[data-testid="brandsText"]) { display: none !important; }
