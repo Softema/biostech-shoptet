@@ -20,6 +20,28 @@
     link.innerHTML = '<img src="' + LOGO_URL + '" alt="BiosTech" class="bt-logo-img">';
   }
 
+
+  var BT_FOOTER_LINKS = {
+    'Rhinoceros — Hobby': '/rhinoceros-hobby/',
+    'M3 — Hobby/Profi': '/m3-hobby-profi/',
+    'ACE Profi': '/ace-profi/',
+    'Minibagry': '/minibagry/',
+    'Nakladače': '/nakladace/',
+    'Příslušenství': '/prislusenstvi/',
+    'Štoky — návštěva': '/showroom-stoky/',
+    'Otevírací doba': '/showroom-stoky/',
+    'Testovací jízda': '/testovaci-jizda/',
+    'Servis': '/servis/',
+    'Financování': '/financovani/'
+  };
+
+  function wireFooterLinks(root) {
+    root.querySelectorAll('a').forEach(function (a) {
+      var text = (a.textContent || '').replace(/\s+/g, ' ').trim();
+      if (BT_FOOTER_LINKS[text]) a.setAttribute('href', BT_FOOTER_LINKS[text]);
+    });
+  }
+
   function replaceFooter() {
     if (document.getElementById('bt-footer')) return;
     var nativeFooter = document.getElementById('footer');
@@ -35,6 +57,7 @@
     } else {
       document.body.appendChild(wrap);
     }
+    wireFooterLinks(wrap);
   }
 
   function init() {
