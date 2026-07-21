@@ -435,40 +435,13 @@
   width: 100vw !important;
   max-width: 100vw !important;
   position: relative !important;
-  left: 50% !important;
-  right: 50% !important;
+  left: 50vw !important;
+  right: auto !important;
   margin-left: -50vw !important;
-  margin-right: -50vw !important;
+  margin-right: 0 !important;
 }
 #navigation .navigation-in.menu {
   max-width: 1440px;
   margin: 0 auto;
   padding: 0 32px;
-}
-
-/* =============================================================
-   HEADER FIX BALIK v4 — menu roztahnout doprava
-   Shoptet schovava presahujici polozky hlavniho menu do
-   .menu-helper ("Vice") — po pridani .bt-nav-right meri spatne.
-   Helper vypneme a polozky natvrdo zobrazime (prebiji i inline
-   display:none, ktery tam dava shoptetovsky JS).
-   ============================================================= */
-#navigation .menu-helper,
-#navigation li[data-testid="menuHelper"] {
-  display: none !important;
-}
-#navigation .menu-level-1 > li {
-  display: inline-flex !important;
-  align-items: center;
-}
-/* jistota: kdyby JS pridaval tridu na skryti */
-#navigation .menu-level-1 > li.splitted,
-#navigation .menu-level-1 > li.cropped {
-  display: inline-flex !important;
-}
-/* ul musi mit plnou sirku, aby margin-left:auto u .bt-nav-right
-   dotlacil prave polozky az k okraji kontejneru */
-#navigation .menu-level-1 {
-  width: 100% !important;
-  flex-wrap: nowrap;
 }
