@@ -385,3 +385,42 @@
 
 /* (10) schovat polozku Znacky v hlavnim menu */
 #navigation .menu-level-1 > li:has(> a[data-testid="brandsText"]) { display: none !important; }
+
+/* =============================================================
+   HEADER FIX BALIK v3
+   ============================================================= */
+
+/* (1) telefon se lame - .top-navigation-contacts je v sablone
+   absolutne pozicovany carousel (left: calc(40% + 10px)), proto
+   byl uzky. Zrusit absolutni pozicovani uplne. */
+.top-navigation-bar .top-navigation-contacts {
+  position: static !important;
+  left: auto !important;
+  width: auto !important;
+  max-width: none !important;
+  white-space: nowrap;
+}
+.top-navigation-bar .top-navigation-contacts a,
+.top-navigation-bar .top-navigation-contacts span,
+.top-navigation-bar .top-navigation-contacts strong {
+  white-space: nowrap;
+}
+
+/* (2) HLEDAT tlacitko - input musel dostat plnou sirku, jinak
+   se fieldset zmensi jen na sirku inputu a tlacitko se ocitne
+   uprostred misto u praveho okraje cele bile listy */
+#header .search form,
+#header .search fieldset {
+  width: 100% !important;
+}
+#header .search input.search-input {
+  flex: 1 1 auto !important;
+  width: 100% !important;
+}
+
+/* (3) mezera pod menu - #navigation ma na desktopu natvrdo
+   height:32px v sablone, nase padding se tak "schovalo" */
+#navigation {
+  height: auto !important;
+  overflow: visible !important;
+}
