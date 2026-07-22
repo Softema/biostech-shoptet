@@ -23,6 +23,26 @@ body.type-detail .shp-tabs-wrapper,
 body.type-detail .row.product-top > .col-xs-12 > .stars-wrapper {
   display: none !important;
 }
+
+/* KLÍČOVÉ: Shoptet za běhu inicializuje zoom/lightbox (cloud-zoom, colorbox)
+   nad naší SKRYTOU nativní galerií. Plugin si vytváří vlastní elementy
+   s kopií fotky (lens, big-zoom okno, mousetrap) a protože měří skrytý
+   element (0×0), umisťuje je rozbitě mimo galerii — obří fotka přes layout.
+   Tyhle runtime artefakty tvrdě schováváme, ať vzniknou kdekoliv: */
+body.type-detail #wrap,
+body.type-detail .mousetrap,
+body.type-detail .cloud-zoom-big,
+body.type-detail .cloud-zoom-lens,
+body.type-detail .cloud-zoom-wrap,
+body.type-detail #cboxOverlay,
+body.type-detail #colorbox {
+  display: none !important;
+}
+/* pojistka: náš hlavní obrázek nikdy nesmí přerůst svůj rámeček */
+body.type-detail .bt-scope-detail .p-main-img img {
+  max-width: 78% !important;
+  max-height: 70% !important;
+}
 /* řádek "Varianta" v nativní tabulce uvnitř formuláře schováme vizuálně,
    ale NEODPOJUJEME select z DOMu — jen ho přesuneme (viz JS) */
 body.type-detail table.detail-parameters tr.variant-list {
