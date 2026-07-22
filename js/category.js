@@ -60,6 +60,8 @@
 
   var VAT = 1.21;
 
+  var PLUS_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
+
   var ALL_CATEGORIES = [
     ['rhinoceros-hobby', 'Rhinoceros — Hobby'],
     ['m3-hobby-profi', 'M3 — Hobby/Profi'],
@@ -421,12 +423,17 @@
     var cartSlot = card.querySelector('.bt-card-cart');
     if (formEl) {
       cartSlot.parentNode.replaceChild(formEl, cartSlot);
+      var cartBtn = formEl.querySelector('button.add-to-cart-button');
+      if (cartBtn) {
+        cartBtn.setAttribute('aria-label', 'Přidat ' + name + ' do košíku');
+        if (!cartBtn.querySelector('svg')) cartBtn.insertAdjacentHTML('beforeend', PLUS_SVG);
+      }
     } else {
       var fallback = document.createElement('a');
       fallback.className = 'add-btn';
       fallback.setAttribute('href', url);
       fallback.setAttribute('aria-label', 'Zobrazit ' + name);
-      fallback.textContent = '+';
+      fallback.innerHTML = PLUS_SVG;
       cartSlot.parentNode.replaceChild(fallback, cartSlot);
     }
 
