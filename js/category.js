@@ -62,6 +62,24 @@
 
   var PLUS_SVG = '<svg class="bt-plus-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
 
+  /* Vyčistí libovolnou cizí ikonu/spinner a vloží naši plus ikonu.
+     Voláno opakovaně (viz guardIcon), protože u některých produktů
+     Shoptet vkládá vlastní ikonu (šipku) AŽ PO naší úpravě (asynchronně),
+     nebo používá jiný tag (<a> místo <button>) — proto nestačí kontrola "již proběhlo". */
+  function ensurePlusIcon(el) {
+    if (!el) return;
+    el.querySelectorAll('svg:not(.bt-plus-icon), i, .icon, .spinner, .loader').forEach(function (n) { n.remove(); });
+    if (!el.querySelector('svg.bt-plus-icon')) el.insertAdjacentHTML('beforeend', PLUS_SVG);
+  }
+  function guardIcon(el) {
+    if (!el) return;
+    ensurePlusIcon(el);
+    if (window.MutationObserver && !el.dataset.btIconGuard) {
+      el.dataset.btIconGuard = 'true';
+      new MutationObserver(function () { ensurePlusIcon(el); }).observe(el, { childList: true });
+    }
+  }
+
   var ALL_CATEGORIES = [
     ['rhinoceros-hobby', 'Rhinoceros — Hobby'],
     ['m3-hobby-profi', 'M3 — Hobby/Profi'],
@@ -356,6 +374,9 @@
     var skuEl = p.querySelector('.p-code [data-micro="sku"]');
     var availEl = p.querySelector('.availability span') || p.querySelector('.availability');
     var formEl = p.querySelector('form.pr-action');
+    // produkty s variantami (cena "od X Kč") nemívají form, jen odkaz/tlačítko na detail —
+    // hledáme ho bez ohledu na tag (button i <a>) a bez ohledu na přesnou třídu
+    var cartCtrl = p.querySelector('[data-testid="buttonAddToCart"], .add-to-cart-button');
 
     var name = txt(nameEl);
     var url = linkEl ? linkEl.getAttribute('href') : '#';
@@ -419,25 +440,28 @@
         '</div>' +
       '</div>';
 
-    // košík: přesuneme nativní form (CSRF + Shoptet ajax zůstávají funkční)
+    // košík: přesuneme nativní form/odkaz (CSRF + Shoptet ajax zůstávají funkční)
     var cartSlot = card.querySelector('.bt-card-cart');
     if (formEl) {
       cartSlot.parentNode.replaceChild(formEl, cartSlot);
-      var cartBtn = formEl.querySelector('button.add-to-cart-button');
+      var cartBtn = formEl.querySelector('[data-testid="buttonAddToCart"], .add-to-cart-button, button, a') || cartCtrl;
       if (cartBtn) {
         cartBtn.setAttribute('aria-label', 'Přidat ' + name + ' do košíku');
-        // Shoptet do tlačítka někdy vkládá vlastní (i skrytou) ikonu/spinner —
-        // tu vždy odstraníme a nahradíme naší plus ikonou, ať vypadá cokoliv.
-        cartBtn.querySelectorAll('svg, i, .icon, .spinner, .loader').forEach(function (el) { el.remove(); });
-        cartBtn.insertAdjacentHTML('beforeend', PLUS_SVG);
+        guardIcon(cartBtn);
       }
+    } else if (cartCtrl) {
+      // produkt bez formuláře (typicky varianty/"od X Kč") — nativní odkaz na detail/výběr,
+      // jen mu vnutíme naši ikonu; href a chování necháváme nativní
+      cartSlot.parentNode.replaceChild(cartCtrl, cartSlot);
+      cartCtrl.setAttribute('aria-label', 'Zobrazit ' + name);
+      guardIcon(cartCtrl);
     } else {
       var fallback = document.createElement('a');
       fallback.className = 'add-btn';
       fallback.setAttribute('href', url);
       fallback.setAttribute('aria-label', 'Zobrazit ' + name);
-      fallback.innerHTML = PLUS_SVG;
       cartSlot.parentNode.replaceChild(fallback, cartSlot);
+      guardIcon(fallback);
     }
 
     // celá karta kliká na detail (kromě odkazů a tlačítek)
