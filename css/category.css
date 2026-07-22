@@ -1,600 +1,394 @@
 /* =============================================================
-   BIOS TECH — category.js
-   Restyl stránky kategorie podle prototypu:
-   1) tmavý cat-hero s textem podle URL slugu
-   2) sidebar s filtry v designu (napojené na nativní Shoptet formy)
-   3) toolbar (počet, řazení, mřížka/seznam)
-   4) přestavba nativních dlaždic .product na designové karty
-      (odkazy, ceny i košík zůstávají nativní = funkční)
+   BIOS TECH — category.css
+   Restyl stránky kategorie (výpis produktů) podle prototypu.
+   Scope: body.type-category (třídu dává sám Shoptet, žádný FOUC)
    ============================================================= */
-(function () {
-  'use strict';
 
-  if (!document.body.classList.contains('type-category')) return;
+/* -------------------------------------------------------------
+   1) SKRÝT vše nativní, co v návrhu není
+   ------------------------------------------------------------- */
+body.type-category .breadcrumbs-wrapper,          /* nativní drobečky (máme je v heru) */
+body.type-category .category-top,                 /* nativní H1 + blok "Nejprodávanější" */
+body.type-category #category-header,              /* nativní řazení + počet (čteme z něj data, zůstává v DOM) */
+body.type-category #filters-wrapper,
+body.type-category aside.sidebar.sidebar-left,    /* nativní sidebar (formuláře v něm dál používáme) */
+body.type-category [class*="benefitBanner"],      /* dárky / výdejní místa pod výpisem */
+body.type-category .category-appendix,
+body.type-category .category-perex {
+  display: none !important;
+}
 
-  /* -----------------------------------------------------------
-     KONFIGURACE — texty hera podle slugu kategorie
-     (badge = štítek linie na kartách produktů v této kategorii)
-     ----------------------------------------------------------- */
-  var CATS = {
-    'malotraktory': {
-      title: 'Malotraktory',
-      sub: 'Nová generace strojů pro vaši práci. Vyberte. Porovnejte. Vyzkoušejte.',
-      badge: { label: 'Malotraktory', cls: '' }
-    },
-    'nove-malotraktory': {
-      title: 'Nové malotraktory',
-      sub: 'Nové stroje skladem — s SPZ a plnou zárukou.',
-      badge: { label: 'Novinka', cls: 'pl-hobby' }
-    },
-    'rhinoceros-hobby': {
-      title: 'Rhinoceros · Hobby řada',
-      sub: 'Pro zahrady, sady a menší pozemky. Cesta začíná tady.',
-      badge: { label: 'Hobby', cls: 'pl-hobby' }
-    },
-    'm3-hobby-profi': {
-      title: 'M3 · Hobby/Profi',
-      sub: 'Pro farmy, vinaře, sadaře a obce. Sílu spojuje s citlivostí.',
-      badge: { label: 'Hobby/Profi', cls: 'pl-profi' }
-    },
-    'ace-profi': {
-      title: 'ACE · Profi',
-      sub: 'Profesionální traktory. Vlajková řada bez kompromisů. Centrála ACE pro ČR ve Štokách.',
-      badge: { label: 'ACE', cls: 'pl-ace' },
-      aceMeta: true
-    },
-    'minibagry': {
-      title: 'Minibagry',
-      sub: 'Nová generace strojů pro vaši práci. Vyberte. Porovnejte. Vyzkoušejte.',
-      badge: { label: 'Minibagry', cls: '' }
-    },
-    'nakladace': {
-      title: 'Nakladače',
-      sub: 'Kompaktní síla pro stavbu i statek.',
-      badge: { label: 'Nakladače', cls: '' }
-    },
-    'prislusenstvi': {
-      title: 'Příslušenství',
-      sub: 'Nová generace strojů pro vaši práci. Vyberte. Porovnejte. Vyzkoušejte.',
-      badge: { label: 'Příslušenství', cls: '' }
-    }
-  };
+/* -------------------------------------------------------------
+   2) Normalizace nativního layoutu (obsah na plnou šířku)
+   ------------------------------------------------------------- */
+body.type-category .content-wrapper-in {
+  display: block !important;
+}
+body.type-category main#content,
+body.type-category main#content.narrow {
+  width: 100% !important;
+  max-width: none !important;
+  float: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 
-  /* Specifikace na kartách (chipy Výkon/Pohon/Hmotnost).
-     Výpis kategorie tahle data nativně neobsahuje, proto mapa
-     podle KÓDU produktu (sku). Doplň řádek pro každý produkt. */
-  var SPEC_MAP = {
-    '45': [['Výkon', '20 HP'], ['Pohon', '4×4'], ['Hmotnost', '720 kg']],
-    '48': [['Výkon', '25 HP'], ['Pohon', '4×4'], ['Hmotnost', '780 kg']]
-  };
+/* -------------------------------------------------------------
+   3) CAT HERO (tmavá hlavička kategorie)
+   ------------------------------------------------------------- */
+.bt-scope .cat-hero {
+  background: var(--bt-black);
+  color: var(--bt-white);
+  padding: 56px 0 64px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+  /* full-bleed pojistka (stejný trik jako u hero na homepage) */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+.bt-scope .cat-hero .breadcrumb {
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.bt-scope .cat-hero .breadcrumb a { color: rgba(255,255,255,0.7); text-decoration: none; }
+.bt-scope .cat-hero .breadcrumb a:hover { color: var(--bt-white); }
+.bt-scope .cat-hero .breadcrumb .sep { opacity: 0.5; }
+.bt-scope .cat-hero .breadcrumb .current { color: var(--bt-white); font-weight: 600; }
+.bt-scope .cat-hero h1 {
+  font-size: clamp(36px, 5vw, 64px);
+  color: var(--bt-white);
+  margin: 18px 0 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.bt-scope .cat-hero p {
+  max-width: 560px;
+  color: var(--bt-chrome);
+  font-size: 16px;
+  margin: 16px 0 0;
+}
+.bt-scope .cat-hero .cat-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--bt-chrome);
+}
+.bt-scope .cat-hero .cat-meta strong { color: var(--bt-white); }
+.bt-scope .cat-hero .cat-meta .cat-meta-ace { color: var(--ace-orange); font-weight: 600; }
 
-  var VAT = 1.21;
+/* -------------------------------------------------------------
+   4) LAYOUT: sidebar + sloupec s produkty
+   ------------------------------------------------------------- */
+.bt-scope .category-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  padding-bottom: 80px;
+}
+@media (max-width: 900px) {
+  .bt-scope .category-layout { grid-template-columns: 1fr; }
+  .bt-scope .sidebar-filters { position: static !important; }
+}
 
-  var PLUS_SVG = '<svg class="bt-plus-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
+/* -------------------------------------------------------------
+   5) SIDEBAR FILTRY
+   ------------------------------------------------------------- */
+.bt-scope .sidebar-filters {
+  position: sticky;
+  top: 124px;
+  align-self: start;
+}
+.bt-scope .filter-block {
+  border-bottom: 1px solid var(--bt-line);
+  padding: 20px 0;
+}
+.bt-scope .filter-block:first-child { padding-top: 0; }
+.bt-scope .filter-block:last-of-type { border-bottom: 0; }
+.bt-scope .filter-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bt-black);
+  margin-bottom: 14px;
+}
+.bt-scope .filter-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--bt-anthracite);
+  gap: 12px;
+}
+.bt-scope .filter-option:hover { color: var(--bt-black); }
+.bt-scope .filter-option .label-wrap { display: flex; align-items: center; gap: 10px; }
+.bt-scope .filter-option .count { font-size: 12px; color: #8B8F95; }
+.bt-scope .filter-option input[type="checkbox"],
+.bt-scope .filter-option input[type="radio"] { display: none; }
+.bt-scope .filter-checkbox {
+  width: 18px; height: 18px;
+  border: 1.5px solid #C5C8CC;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+.bt-scope .filter-option input:checked + .filter-checkbox {
+  background: var(--bt-black);
+  border-color: var(--bt-black);
+}
+.bt-scope .filter-option input:checked + .filter-checkbox::after {
+  content: "\2713";
+  color: var(--bt-pea);
+  font-size: 12px;
+  font-weight: 700;
+}
+.bt-scope .filter-radio {
+  width: 18px; height: 18px;
+  border: 1.5px solid #C5C8CC;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.bt-scope .filter-option input:checked + .filter-radio { border-color: var(--bt-black); }
+.bt-scope .filter-option input:checked + .filter-radio::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--bt-pea);
+}
+.bt-scope .filter-ace-dot { color: var(--ace-orange); margin-left: 6px; font-size: 10px; }
 
-  /* Vyčistí libovolnou cizí ikonu/spinner a vloží naši plus ikonu.
-     Voláno opakovaně (viz guardIcon), protože u některých produktů
-     Shoptet vkládá vlastní ikonu (šipku) AŽ PO naší úpravě (asynchronně),
-     nebo používá jiný tag (<a> místo <button>) — proto nestačí kontrola "již proběhlo". */
-  function ensurePlusIcon(el) {
-    if (!el) return;
-    el.querySelectorAll('svg:not(.bt-plus-icon), i, .icon, .spinner, .loader').forEach(function (n) { n.remove(); });
-    if (!el.querySelector('svg.bt-plus-icon')) el.insertAdjacentHTML('beforeend', PLUS_SVG);
-  }
-  function guardIcon(el) {
-    if (!el) return;
-    ensurePlusIcon(el);
-    if (window.MutationObserver && !el.dataset.btIconGuard) {
-      el.dataset.btIconGuard = 'true';
-      new MutationObserver(function () { ensurePlusIcon(el); }).observe(el, { childList: true });
-    }
-  }
+.bt-scope .price-range { display: flex; gap: 8px; margin-top: 12px; }
+.bt-scope .price-range input {
+  flex: 1;
+  border: 1px solid var(--bt-line);
+  background: var(--bt-paper);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  width: 0;
+}
+.bt-scope .price-range input:focus {
+  outline: none;
+  border-color: var(--bt-black);
+  background: var(--bt-white);
+}
+.bt-scope .filter-note { font-size: 11px; color: #6B6F75; margin-top: 8px; }
 
-  var ALL_CATEGORIES = [
-    ['malotraktory', 'Malotraktory'],
-    ['nove-malotraktory', 'Nové malotraktory'],
-    ['rhinoceros-hobby', 'Rhinoceros — Hobby'],
-    ['m3-hobby-profi', 'M3 — Hobby/Profi'],
-    ['ace-profi', 'ACE Profi'],
-    ['minibagry', 'Minibagry'],
-    ['nakladace', 'Nakladače'],
-    ['prislusenstvi', 'Příslušenství']
-  ];
+/* -------------------------------------------------------------
+   6) TOOLBAR (počet, řazení, přepínač zobrazení)
+   ------------------------------------------------------------- */
+.bt-scope .category-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: var(--bt-paper);
+  border-radius: var(--radius-md);
+  flex-wrap: wrap;
+}
+.bt-scope .category-toolbar .result-count { font-size: 13px; color: #6B6F75; }
+.bt-scope .category-toolbar .result-count strong { color: var(--bt-black); }
+.bt-scope .toolbar-right { display: flex; align-items: center; gap: 12px; }
+.bt-scope .toolbar-right label { font-size: 13px; color: #6B6F75; }
+.bt-scope .toolbar-right select {
+  border: 1px solid var(--bt-line);
+  background: var(--bt-white);
+  padding: 8px 30px 8px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231A1A1A' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+}
+.bt-scope .toolbar-right select:focus { outline: none; border-color: var(--bt-black); }
+.bt-scope .toolbar-right .view-toggle {
+  display: inline-flex;
+  border: 1px solid var(--bt-line);
+  border-radius: 6px;
+  background: var(--bt-white);
+  overflow: hidden;
+}
+.bt-scope .toolbar-right .view-toggle button {
+  background: transparent;
+  border: 0;
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B6F75;
+  cursor: pointer;
+}
+.bt-scope .toolbar-right .view-toggle button.active { background: var(--bt-black); color: var(--bt-pea); }
+.bt-scope .active-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.bt-scope .filter-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bt-black);
+  color: var(--bt-white);
+  border-radius: 100px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.bt-scope .filter-chip .x { opacity: 0.7; cursor: pointer; }
 
-  /* -----------------------------------------------------------
-     Helpers
-     ----------------------------------------------------------- */
-  function slug() {
-    var m = location.pathname.match(/^\/([^\/]+)\//);
-    return m ? m[1] : '';
-  }
-  function esc(s) {
-    return String(s == null ? '' : s)
-      .replace(/&/g, '&amp;').replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-  }
-  function txt(el) { return el ? el.textContent.replace(/\s+/g, ' ').trim() : ''; }
-  function fmtKc(n) {
-    return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, '\u00A0') + '\u00A0Kč';
-  }
-  function pluralStroj(n) {
-    if (n === 1) return 'stroj';
-    if (n >= 2 && n <= 4) return 'stroje';
-    return 'strojů';
-  }
-  function totalCount() {
-    var el = document.querySelector('#category-header .listItemsTotal strong');
-    if (el) { var n = parseInt(txt(el), 10); if (!isNaN(n)) return n; }
-    return document.querySelectorAll('#products > .product').length;
-  }
-  function urlParam(name) {
-    var m = location.search.match(new RegExp('[?&]' + name + '=([^&]*)'));
-    return m ? decodeURIComponent(m[1]) : null;
-  }
+/* -------------------------------------------------------------
+   7) GRID PRODUKTŮ — přebíjí nativní .products/.product z Disca
+   POZOR: nativní .products má Bootstrap clearfix ::before/::after,
+   při display:grid by se staly grid-itemy (stejná zrada jako u hero)
+   ------------------------------------------------------------- */
+.bt-scope .bt-products-col #products {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.bt-scope .bt-products-col #products::before,
+.bt-scope .bt-products-col #products::after {
+  content: none !important;
+  display: none !important;
+}
+@media (max-width: 1100px) {
+  .bt-scope .bt-products-col #products { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .bt-scope .bt-products-col #products { grid-template-columns: 1fr; }
+}
+.bt-scope .bt-products-col #products .product {
+  width: 100% !important;
+  max-width: none !important;
+  float: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
+}
+.bt-scope .bt-products-col #products .product::before,
+.bt-scope .bt-products-col #products .product::after {
+  content: none !important;
+  display: none !important;
+}
+/* karta je uvnitř .product — musí vyplnit výšku buňky gridu */
+.bt-scope .bt-products-col .product-card { height: 100%; cursor: pointer; }
+.bt-scope .bt-products-col .product-card .product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+  pointer-events: none;
+}
 
-  var CUR = slug();
-  var CFG = CATS[CUR] || {
-    title: txt(document.querySelector('h1.category-title')) || 'Kategorie',
-    sub: '',
-    badge: { label: '', cls: '' }
-  };
+/* nativní košíkové tlačítko převléknuté do kulatého "+"
+   POZOR: ikona je skutečný <svg> vložený z JS (ne CSS content: "+"),
+   protože textový glyf není u žádného fontu opticky vystředěný —
+   flexbox naopak vystředí SVG s explicitní width/height pixelově přesně. */
+.bt-scope .product-card .product-foot form.pr-action { margin: 0; flex-shrink: 0; line-height: 0; }
+.bt-scope .product-card .product-foot .add-to-cart-button {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 0 !important;
+  border-radius: 50% !important;
+  border: 0 !important;
+  background: var(--bt-black) !important;
+  color: var(--bt-white) !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  line-height: 0 !important;
+  transition: background .15s, transform .15s;
+}
+.bt-scope .product-card .product-foot .add-to-cart-button span { display: none !important; }
+/* KLÍČOVÉ: Disco kreslí ikonu košíku/šipky ikonovým fontem přes ::before
+   (.btn.add-to-cart-button:before { content:"\e910" }) — není to element
+   v DOMu, takže ji nejde odstranit JS-em. Musí se zabít tady: */
+.bt-scope .product-card .product-foot .add-to-cart-button::before,
+.bt-scope .product-card .product-foot .add-to-cart-button::after {
+  content: none !important;
+  display: none !important;
+  margin: 0 !important;
+}
+.bt-scope .product-card .product-foot .add-to-cart-button svg:not(.bt-plus-icon),
+.bt-scope .product-card .product-foot .add-to-cart-button i,
+.bt-scope .product-card .product-foot .add-to-cart-button .icon {
+  display: none !important;
+}
+.bt-scope .product-card .product-foot .add-to-cart-button svg.bt-plus-icon {
+  display: block;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
+}
+.bt-scope .product-card .product-foot .add-to-cart-button:hover {
+  background: var(--bt-pea) !important;
+  color: var(--bt-black) !important;
+  transform: rotate(90deg);
+}
+/* fallback "+" jako odkaz na detail (produkt bez košíkového formu) */
+.bt-scope .product-card .add-btn { text-decoration: none; }
+.bt-scope .product-card .add-btn svg.bt-plus-icon { display: block; width: 18px; height: 18px; pointer-events: none; }
 
-  /* -----------------------------------------------------------
-     1) CAT HERO
-     ----------------------------------------------------------- */
-  function buildHero() {
-    if (document.getElementById('bt-cat-hero')) return;
-    var wrapper = document.getElementById('content-wrapper');
-    if (!wrapper || !wrapper.parentNode) return;
+/* nedostupné zboží — červená varianta labelu dostupnosti */
+.bt-scope .product-card .availability-label.is-out { color: #C4453A; }
+.bt-scope .product-card .availability-label.is-out::before { background: #C4453A; }
 
-    var n = totalCount();
-    var metaAce = CFG.aceMeta
-      ? '<span>·</span><span class="cat-meta-ace">★ Centrála ACE pro ČR</span>'
-      : '';
+/* -------------------------------------------------------------
+   8) LIST VIEW (přepínač seznam)
+   ------------------------------------------------------------- */
+.bt-scope .bt-products-col #products.bt-view-list { grid-template-columns: 1fr; }
+.bt-scope #products.bt-view-list .product-card { flex-direction: row; }
+.bt-scope #products.bt-view-list .product-card .product-image {
+  width: 320px;
+  flex-shrink: 0;
+  aspect-ratio: 4 / 3;
+}
+.bt-scope #products.bt-view-list .product-card .product-body { flex: 1; }
+@media (max-width: 640px) {
+  .bt-scope #products.bt-view-list .product-card { flex-direction: column; }
+  .bt-scope #products.bt-view-list .product-card .product-image { width: 100%; }
+}
 
-    var host = document.createElement('div');
-    host.className = 'bt-scope';
-    host.id = 'bt-cat-hero';
-    host.innerHTML =
-      '<section class="cat-hero"><div class="container">' +
-        '<div class="breadcrumb">' +
-          '<a href="/">Domů</a><span class="sep">/</span>' +
-          '<span class="current">' + esc(CFG.title) + '</span>' +
-        '</div>' +
-        '<h1>' + esc(CFG.title) + '</h1>' +
-        (CFG.sub ? '<p>' + esc(CFG.sub) + '</p>' : '') +
-        '<div class="cat-meta">' +
-          '<span><strong>' + n + '</strong> ' + pluralStroj(n) + '</span>' +
-          '<span>·</span><span>Showroom Štoky</span>' +
-          '<span>·</span><span>Testovací jízda zdarma</span>' +
-          metaAce +
-        '</div>' +
-      '</div></section>';
-    wrapper.parentNode.insertBefore(host, wrapper);
-  }
-
-  /* -----------------------------------------------------------
-     2) SIDEBAR
-     ----------------------------------------------------------- */
-  function filterOption(type, name, label, extraHtml, checked, countSlug) {
-    return '<label class="filter-option" ' + (countSlug ? 'data-nav-slug="' + esc(countSlug) + '"' : '') + '>' +
-      '<span class="label-wrap">' +
-        '<input type="' + type + '"' + (name ? ' name="' + name + '"' : '') + (checked ? ' checked' : '') + '>' +
-        '<span class="filter-' + (type === 'radio' ? 'radio' : 'checkbox') + '"></span>' +
-        '<span>' + label + (extraHtml || '') + '</span>' +
-      '</span>' +
-      (countSlug ? '<span class="count" data-count-slug="' + esc(countSlug) + '"></span>' : '') +
-    '</label>';
-  }
-
-  function buildSidebarHtml() {
-    var lines =
-      filterOption('radio', 'bt-line', 'Všechny linie', '', false, null) +
-      filterOption('radio', 'bt-line', 'Hobby (Rhinoceros)', '', CUR === 'rhinoceros-hobby', 'rhinoceros-hobby') +
-      filterOption('radio', 'bt-line', 'Hobby/Profi (M3)', '', CUR === 'm3-hobby-profi', 'm3-hobby-profi') +
-      filterOption('radio', 'bt-line', 'ACE Profi', '<span class="filter-ace-dot">●</span>', CUR === 'ace-profi', 'ace-profi');
-
-    var cats = ALL_CATEGORIES.map(function (c) {
-      return filterOption('checkbox', '', esc(c[1]), '', CUR === c[0], c[0]);
-    }).join('');
-
-    var hp = ['20-30 HP', '30-50 HP', '50-75 HP', '75+ HP'].map(function (l) {
-      return filterOption('checkbox', '', l, '', false, null);
-    }).join('');
-
-    var stockChecked = urlParam('stock') === '1';
-
-    return '' +
-      '<div class="filter-block"><div class="filter-title">Produktová linie</div>' + lines + '</div>' +
-      '<div class="filter-block"><div class="filter-title">Kategorie</div>' + cats + '</div>' +
-      '<div class="filter-block"><div class="filter-title">Výkon (HP)</div>' + hp + '</div>' +
-      '<div class="filter-block"><div class="filter-title">Cena</div>' +
-        '<div class="price-range">' +
-          '<input type="text" inputmode="numeric" placeholder="Od" id="bt-price-from">' +
-          '<input type="text" inputmode="numeric" placeholder="Do" id="bt-price-to">' +
-        '</div>' +
-        '<div class="filter-note">Hodnoty v Kč s DPH</div>' +
-      '</div>' +
-      '<div class="filter-block"><div class="filter-title">Dostupnost</div>' +
-        filterOption('checkbox', '', 'Pouze skladem', '', stockChecked, null).replace('<label class="filter-option" >', '<label class="filter-option" id="bt-stock-filter">') +
-        filterOption('checkbox', '', 'Testovací jízda k dispozici', '', false, null) +
-      '</div>' +
-      '<a class="btn btn-ghost" style="width:100%;margin-top:16px;" href="/' + esc(CUR) + '/">Resetovat filtry</a>';
-  }
-
-  function wireSidebar(aside) {
-    // navigace klikem na linii/kategorii
-    aside.querySelectorAll('[data-nav-slug]').forEach(function (opt) {
-      opt.addEventListener('click', function (e) {
-        e.preventDefault();
-        var s = opt.getAttribute('data-nav-slug');
-        if (s && s !== CUR) location.href = '/' + s + '/';
-      });
-    });
-
-    // cena -> nativní #price-filter-form
-    function applyPrice() {
-      var form = document.getElementById('price-filter-form');
-      if (!form) return;
-      var from = parseInt((document.getElementById('bt-price-from').value || '').replace(/\D/g, ''), 10);
-      var to = parseInt((document.getElementById('bt-price-to').value || '').replace(/\D/g, ''), 10);
-      var minEl = document.getElementById('price-value-min');
-      var maxEl = document.getElementById('price-value-max');
-      var boundMin = parseInt(txt(document.getElementById('categoryMinValue')), 10);
-      var boundMax = parseInt(txt(document.getElementById('categoryMaxValue')), 10);
-      if (minEl) minEl.value = !isNaN(from) ? from : (!isNaN(boundMin) ? boundMin : 0);
-      if (maxEl) maxEl.value = !isNaN(to) ? to : (!isNaN(boundMax) ? boundMax : 99999999);
-      form.submit();
-    }
-    ['bt-price-from', 'bt-price-to'].forEach(function (id) {
-      var inp = aside.querySelector('#' + id);
-      if (inp) inp.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter') applyPrice();
-      });
-      if (inp) inp.addEventListener('change', applyPrice);
-    });
-
-    // pouze skladem -> nativní checkbox #stock (má data-url)
-    var stockOpt = aside.querySelector('#bt-stock-filter');
-    if (stockOpt) {
-      stockOpt.addEventListener('click', function (e) {
-        e.preventDefault();
-        var native = document.getElementById('stock');
-        if (urlParam('stock') === '1') {
-          location.href = location.pathname + location.search.replace(/[?&]stock=1/, '').replace(/^&/, '?');
-        } else if (native && !native.disabled && native.getAttribute('data-url')) {
-          location.href = native.getAttribute('data-url');
-        }
-      });
-    }
-  }
-
-  /* počty produktů v ostatních kategoriích (fetch + sessionStorage cache) */
-  function fillCounts(scopeEl) {
-    var spans = scopeEl.querySelectorAll('[data-count-slug]');
-    spans.forEach(function (span) {
-      var s = span.getAttribute('data-count-slug');
-      if (s === CUR) { span.textContent = totalCount(); return; }
-      var cacheKey = 'btCatCount:' + s;
-      var cached = null;
-      try { cached = sessionStorage.getItem(cacheKey); } catch (e) {}
-      if (cached !== null) { span.textContent = cached; return; }
-      fetch('/' + s + '/', { credentials: 'same-origin' })
-        .then(function (r) { return r.ok ? r.text() : ''; })
-        .then(function (html) {
-          var m = html.match(/listItemsTotal[^>]*>\s*<strong>\s*(\d+)/);
-          var n = m ? m[1] : '';
-          try { sessionStorage.setItem(cacheKey, n); } catch (e) {}
-          span.textContent = n;
-        })
-        .catch(function () { /* počet prostě nezobrazíme */ });
-    });
-  }
-
-  /* -----------------------------------------------------------
-     3) TOOLBAR
-     ----------------------------------------------------------- */
-  var SORTS = [
-    ['', 'Doporučené'],
-    ['price', 'Cena ↑'],
-    ['-price', 'Cena ↓'],
-    ['name', 'Název']
-  ];
-
-  function buildToolbarHtml() {
-    var n = totalCount();
-    var cur = urlParam('order') || '';
-    var opts = SORTS.map(function (s) {
-      return '<option value="' + s[0] + '"' + (s[0] === cur ? ' selected' : '') + '>' + s[1] + '</option>';
-    }).join('');
-
-    var chips = '';
-    if (urlParam('stock') === '1') chips += '<span class="filter-chip" data-chip="stock">Skladem <span class="x">×</span></span>';
-
-    var svgGrid = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect></svg>';
-    var svgList = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="6"></rect><rect x="3" y="14" width="18" height="6"></rect></svg>';
-
-    return '<div class="category-toolbar">' +
-      '<div>' +
-        '<div class="result-count"><strong>' + n + '</strong> ' + pluralStroj(n) + '</div>' +
-        (chips ? '<div class="active-filters">' + chips + '</div>' : '') +
-      '</div>' +
-      '<div class="toolbar-right">' +
-        '<label>Řadit:</label>' +
-        '<select id="bt-sort">' + opts + '</select>' +
-        '<div class="view-toggle">' +
-          '<button type="button" class="active" data-view="grid" aria-label="Mřížka">' + svgGrid + '</button>' +
-          '<button type="button" data-view="list" aria-label="Seznam">' + svgList + '</button>' +
-        '</div>' +
-      '</div>' +
-    '</div>';
-  }
-
-  function wireToolbar(col) {
-    var sel = col.querySelector('#bt-sort');
-    if (sel) sel.addEventListener('change', function () {
-      var v = sel.value;
-      var url = '/' + CUR + '/';
-      var keep = urlParam('stock') === '1' ? 'stock=1' : '';
-      var q = [];
-      if (v) q.push('order=' + v);
-      if (keep) q.push(keep);
-      location.href = url + (q.length ? '?' + q.join('&') : '');
-    });
-
-    var chipStock = col.querySelector('[data-chip="stock"] .x');
-    if (chipStock) chipStock.addEventListener('click', function () {
-      location.href = location.pathname + location.search.replace(/[?&]stock=1/, '').replace(/^&/, '?');
-    });
-
-    var products = document.getElementById('products');
-    col.querySelectorAll('.view-toggle button').forEach(function (btn) {
-      btn.addEventListener('click', function () {
-        col.querySelectorAll('.view-toggle button').forEach(function (b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        if (!products) return;
-        var list = btn.getAttribute('data-view') === 'list';
-        products.classList.toggle('bt-view-list', list);
-        try { sessionStorage.setItem('btCatView', list ? 'list' : 'grid'); } catch (e) {}
-      });
-    });
-    var savedView = null;
-    try { savedView = sessionStorage.getItem('btCatView'); } catch (e) {}
-    if (savedView === 'list' && products) {
-      products.classList.add('bt-view-list');
-      col.querySelectorAll('.view-toggle button').forEach(function (b) {
-        b.classList.toggle('active', b.getAttribute('data-view') === 'list');
-      });
-    }
-  }
-
-  /* -----------------------------------------------------------
-     4) TRANSFORMACE PRODUKTŮ (.product -> designová karta)
-     ----------------------------------------------------------- */
-  function transformProduct(product) {
-    if (product.dataset.btDone) return;
-    product.dataset.btDone = 'true';
-
-    var p = product.querySelector('.p');
-    if (!p) return;
-
-    var nameEl = p.querySelector('a.name [data-micro="name"]') || p.querySelector('a.name');
-    var linkEl = p.querySelector('a.name');
-    var imgEl = p.querySelector('a.image img');
-    var offerEl = p.querySelector('[data-micro="offer"]');
-    var priceEl = p.querySelector('.price-final strong') || p.querySelector('.price-final');
-    var skuEl = p.querySelector('.p-code [data-micro="sku"]');
-    var availEl = p.querySelector('.availability span') || p.querySelector('.availability');
-    var formEl = p.querySelector('form.pr-action');
-    // produkty s variantami (cena "od X Kč") nemívají form, jen odkaz/tlačítko na detail —
-    // hledáme ho bez ohledu na tag (button i <a>) a bez ohledu na přesnou třídu
-    var cartCtrl = p.querySelector('[data-testid="buttonAddToCart"], .add-to-cart-button');
-
-    var name = txt(nameEl);
-    var url = linkEl ? linkEl.getAttribute('href') : '#';
-    var imgSrc = imgEl ? (imgEl.getAttribute('data-micro-image') || imgEl.getAttribute('data-src') || imgEl.getAttribute('src')) : '';
-    var sku = txt(skuEl);
-    var availText = txt(availEl) || '';
-    var inStock = offerEl
-      ? /InStock/i.test(offerEl.getAttribute('data-micro-availability') || '')
-      : !/nedostupn/i.test(availText);
-    var priceText = txt(priceEl);
-    var priceNum = parseInt((offerEl && offerEl.getAttribute('data-micro-price') || priceText).replace(/[^\d]/g, ''), 10);
-    // data-micro-price je "277000.00" -> useknout haléře
-    if (offerEl && offerEl.getAttribute('data-micro-price')) {
-      priceNum = Math.round(parseFloat(offerEl.getAttribute('data-micro-price')));
-    }
-
-    var flags = [];
-    p.querySelectorAll('.flags .flag, .extra-flags .flag, .flag-default, .flag-action').forEach(function (f) {
-      var t = txt(f); if (t) flags.push(t);
-    });
-
-    var specs = SPEC_MAP[sku] || null;
-
-    var badge = CFG.badge && CFG.badge.label
-      ? '<span class="product-line ' + esc(CFG.badge.cls) + '">' + esc(CFG.badge.label) + '</span>'
-      : '';
-    var flagsHtml = flags.length
-      ? '<div class="product-flags">' + flags.map(function (f) { return '<span class="flag">' + esc(f) + '</span>'; }).join('') + '</div>'
-      : '';
-    var specsHtml = specs
-      ? '<div class="product-specs">' + specs.map(function (s) {
-          return '<span class="spec">' + esc(s[0]) + ': <strong>' + esc(s[1]) + '</strong></span>';
-        }).join('') + '</div>'
-      : '';
-    var bezDph = (!isNaN(priceNum) && priceNum > 0)
-      ? '<span class="price-additional">' + fmtKc(priceNum / VAT) + ' bez DPH</span>'
-      : '';
-    var availHtml = '<span class="availability-label' + (inStock ? '' : ' is-out') + '">' +
-      esc(availText || (inStock ? 'Skladem' : 'Nedostupné')) + '</span>';
-
-    var card = document.createElement('article');
-    card.className = 'product-card';
-    card.innerHTML =
-      '<div class="product-image">' +
-        badge + flagsHtml +
-        '<a href="' + esc(url) + '" tabindex="-1" aria-hidden="true" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;">' +
-          (imgSrc ? '<img src="' + esc(imgSrc) + '" alt="' + esc(name) + '" loading="lazy">' : '') +
-        '</a>' +
-      '</div>' +
-      '<div class="product-body">' +
-        '<div class="product-brand">BIOS TECH' + (sku ? ' · ' + esc(sku) : '') + '</div>' +
-        '<h3 class="product-name"><a href="' + esc(url) + '" style="color:inherit;text-decoration:none;">' + esc(name) + '</a></h3>' +
-        specsHtml +
-        '<div class="product-foot">' +
-          '<div>' +
-            availHtml +
-            '<div class="price-final">' + esc(priceText) + '</div>' +
-            bezDph +
-          '</div>' +
-          '<span class="bt-card-cart"></span>' +
-        '</div>' +
-      '</div>';
-
-    // košík: přesuneme nativní form/odkaz (CSRF + Shoptet ajax zůstávají funkční)
-    var cartSlot = card.querySelector('.bt-card-cart');
-    if (formEl) {
-      cartSlot.parentNode.replaceChild(formEl, cartSlot);
-      var cartBtn = formEl.querySelector('[data-testid="buttonAddToCart"], .add-to-cart-button, button, a') || cartCtrl;
-      if (cartBtn) {
-        cartBtn.setAttribute('aria-label', 'Přidat ' + name + ' do košíku');
-        guardIcon(cartBtn);
-      }
-    } else if (cartCtrl) {
-      // produkt bez formuláře (typicky varianty/"od X Kč") — nativní odkaz na detail/výběr,
-      // jen mu vnutíme naši ikonu; href a chování necháváme nativní
-      cartSlot.parentNode.replaceChild(cartCtrl, cartSlot);
-      cartCtrl.setAttribute('aria-label', 'Zobrazit ' + name);
-      guardIcon(cartCtrl);
-    } else {
-      var fallback = document.createElement('a');
-      fallback.className = 'add-btn';
-      fallback.setAttribute('href', url);
-      fallback.setAttribute('aria-label', 'Zobrazit ' + name);
-      cartSlot.parentNode.replaceChild(fallback, cartSlot);
-      guardIcon(fallback);
-    }
-
-    // celá karta kliká na detail (kromě odkazů a tlačítek)
-    card.addEventListener('click', function (e) {
-      if (e.target.closest('a, button, form, input, select, label')) return;
-      location.href = url;
-    });
-
-    product.innerHTML = '';
-    product.appendChild(card);
-  }
-
-  function transformAll() {
-    document.querySelectorAll('#products > .product').forEach(transformProduct);
-  }
-
-  /* -----------------------------------------------------------
-     5) LAYOUT + Načíst další stroje
-     ----------------------------------------------------------- */
-  function nextPageLink() {
-    return document.querySelector('.pagination a[rel="next"], .pagination .next a, a.pagination-next');
-  }
-
-  function buildLayout() {
-    if (document.getElementById('bt-cat-layout')) return;
-    var contentWrap = document.querySelector('.category-content-wrapper') || document.getElementById('content');
-    var products = document.getElementById('products');
-    if (!contentWrap || !products) return;
-
-    var host = document.createElement('div');
-    host.className = 'bt-scope';
-    host.id = 'bt-cat-layout';
-
-    var layout = document.createElement('div');
-    layout.className = 'category-layout';
-
-    var aside = document.createElement('aside');
-    aside.className = 'sidebar-filters';
-    aside.innerHTML = buildSidebarHtml();
-
-    var col = document.createElement('div');
-    col.className = 'bt-products-col';
-    col.innerHTML = buildToolbarHtml();
-
-    layout.appendChild(aside);
-    layout.appendChild(col);
-    host.appendChild(layout);
-    contentWrap.appendChild(host);
-
-    // přesun nativního gridu do našeho sloupce
-    col.appendChild(products);
-
-    // prázdná kategorie
-    if (!products.querySelector('.product')) {
-      var empty = document.createElement('div');
-      empty.className = 'bt-cat-empty';
-      empty.textContent = 'V této kategorii zatím nejsou žádné stroje.';
-      col.appendChild(empty);
-    }
-
-    // Načíst další stroje — jen pokud existuje další stránka
-    var next = nextPageLink();
-    if (next) {
-      var wrap = document.createElement('div');
-      wrap.className = 'bt-load-more-wrap';
-      var btn = document.createElement('button');
-      btn.className = 'btn btn-ghost btn-lg';
-      btn.type = 'button';
-      btn.textContent = 'Načíst další stroje';
-      wrap.appendChild(btn);
-      col.appendChild(wrap);
-
-      btn.addEventListener('click', function () {
-        var link = nextPageLink();
-        var href = btn.dataset.next || (link && link.getAttribute('href'));
-        if (!href) { wrap.remove(); return; }
-        btn.disabled = true;
-        fetch(href, { credentials: 'same-origin' })
-          .then(function (r) { return r.text(); })
-          .then(function (html) {
-            var doc = new DOMParser().parseFromString(html, 'text/html');
-            doc.querySelectorAll('#products > .product').forEach(function (np) {
-              var node = document.importNode(np, true);
-              products.appendChild(node);
-              transformProduct(node);
-            });
-            var nn = doc.querySelector('.pagination a[rel="next"], .pagination .next a, a.pagination-next');
-            if (nn) { btn.dataset.next = nn.getAttribute('href'); btn.disabled = false; }
-            else { wrap.remove(); }
-          })
-          .catch(function () { location.href = href; });
-      });
-    }
-    // nativní stránkování schovat (nahrazuje ho tlačítko)
-    document.querySelectorAll('.pagination').forEach(function (el) { el.style.display = 'none'; });
-
-    wireSidebar(aside);
-    wireToolbar(col);
-    fillCounts(aside);
-  }
-
-  /* -----------------------------------------------------------
-     Init
-     ----------------------------------------------------------- */
-  function init() {
-    buildHero();
-    transformAll();
-    buildLayout();
-
-    // pojistka: kdyby Shoptet do #products cokoliv doplnil ajaxem
-    var products = document.getElementById('products');
-    if (products && window.MutationObserver) {
-      new MutationObserver(function () {
-        document.querySelectorAll('#products > .product:not([data-bt-done])').forEach(transformProduct);
-      }).observe(products, { childList: true });
-    }
-  }
-
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', init);
-  } else {
-    init();
-  }
-})();
+/* -------------------------------------------------------------
+   9) NAČÍST DALŠÍ STROJE + prázdná kategorie
+   ------------------------------------------------------------- */
+.bt-scope .bt-load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 56px;
+}
+.bt-scope .bt-cat-empty {
+  padding: 48px 0;
+  color: #6B6F75;
+  font-size: 15px;
+}
