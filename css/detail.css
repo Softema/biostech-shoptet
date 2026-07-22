@@ -14,7 +14,8 @@ body.type-detail table.detail-parameters.js-hidden, /* pomocná native tabulka, 
 body.type-detail .p-short-description,        /* přesouváme do p-info */
 body.type-detail .social-buttons-wrapper,
 body.type-detail .stars-wrapper,
-body.type-detail .p-image-wrapper > .p-image ~ *:not(.p-thumbnails-wrapper),
+body.type-detail .p-image-wrapper,             /* celá nativní galerie (foto + náhledy) — stavíme vlastní */
+body.type-detail [data-testid="productCardBrandName"], /* nativní "Značka: X" odkaz — není ve vzoru */
 body.type-detail aside.sidebar.sidebar-left,
 body.type-detail .benefitBanner,
 body.type-detail .shp-tabs-wrapper,
@@ -45,6 +46,8 @@ body.type-detail main#content.narrow {
 .bt-scope-detail .breadcrumbs-wrapper,
 body.type-detail .breadcrumbs-wrapper {
   padding: 24px 0 0;
+  overflow: visible !important;
+  max-width: none !important;
 }
 body.type-detail .breadcrumbs-wrapper .breadcrumbs {
   display: flex;
@@ -53,6 +56,11 @@ body.type-detail .breadcrumbs-wrapper .breadcrumbs {
   font-size: 13px;
   color: #6B6F75;
   flex-wrap: wrap;
+  overflow: visible !important;
+  white-space: normal !important;
+  text-overflow: clip !important;
+  max-width: none !important;
+  margin: 0 !important;
 }
 body.type-detail .breadcrumbs-wrapper .breadcrumbs a { color: #6B6F75; text-decoration: none; }
 body.type-detail .breadcrumbs-wrapper .breadcrumbs a:hover { color: var(--bt-black); }
