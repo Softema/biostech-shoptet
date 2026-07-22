@@ -16,6 +16,7 @@ body.type-detail .social-buttons-wrapper,
 body.type-detail .stars-wrapper,
 body.type-detail .p-image-wrapper,             /* celá nativní galerie (foto + náhledy) — stavíme vlastní */
 body.type-detail [data-testid="productCardBrandName"], /* nativní "Značka: X" odkaz — není ve vzoru */
+body.type-detail [data-testid="productCardDescr"],     /* nativní odkaz "Detailní informace" — není ve vzoru */
 body.type-detail aside.sidebar.sidebar-left,
 body.type-detail .benefitBanner,
 body.type-detail .shp-tabs-wrapper,
@@ -90,9 +91,24 @@ body.type-detail .breadcrumbs-wrapper .appendix { display: none; }
 }
 @media (max-width: 600px) {
   .bt-scope-detail .p-gallery { grid-template-columns: 1fr; }
-  .bt-scope-detail .p-thumbs { order: 2; flex-direction: row !important; overflow-x: auto; }
+  .bt-scope-detail .p-thumbs { order: 2; flex-direction: row !important; overflow-x: auto; max-height: none; }
 }
-.bt-scope-detail .p-thumbs { display: flex; flex-direction: column; gap: 10px; }
+.bt-scope-detail .p-thumbs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  /* reálné produkty mají až 30 fotek (vzor počítal se 4) — sloupec
+     omezíme na výšku hlavního obrázku a scrollujeme uvnitř */
+  max-height: 560px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bt-line) transparent;
+}
+.bt-scope-detail .p-thumbs::-webkit-scrollbar { width: 6px; }
+.bt-scope-detail .p-thumbs::-webkit-scrollbar-thumb { background: var(--bt-line); border-radius: 3px; }
+.bt-scope-detail .p-thumbs::-webkit-scrollbar-track { background: transparent; }
 .bt-scope-detail .p-thumbs .p-thumb {
   width: 96px; height: 96px;
   border-radius: var(--radius-md);
