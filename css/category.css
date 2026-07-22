@@ -309,8 +309,11 @@ body.type-category main#content.narrow {
   pointer-events: none;
 }
 
-/* nativní košíkové tlačítko převléknuté do kulatého "+" */
-.bt-scope .product-card .product-foot form.pr-action { margin: 0; flex-shrink: 0; }
+/* nativní košíkové tlačítko převléknuté do kulatého "+"
+   POZOR: ikona je skutečný <svg> vložený z JS (ne CSS content: "+"),
+   protože textový glyf není u žádného fontu opticky vystředěný —
+   flexbox naopak vystředí SVG s explicitní width/height pixelově přesně. */
+.bt-scope .product-card .product-foot form.pr-action { margin: 0; flex-shrink: 0; line-height: 0; }
 .bt-scope .product-card .product-foot .add-to-cart-button {
   width: 40px !important;
   height: 40px !important;
@@ -323,16 +326,15 @@ body.type-category main#content.narrow {
   align-items: center;
   justify-content: center;
   padding: 0 !important;
-  font-size: 0 !important;
-  line-height: 1 !important;
+  line-height: 0 !important;
   transition: background .15s, transform .15s;
 }
 .bt-scope .product-card .product-foot .add-to-cart-button span { display: none !important; }
-.bt-scope .product-card .product-foot .add-to-cart-button::before {
-  content: "+";
-  font-size: 22px;
-  font-weight: 600;
-  line-height: 1;
+.bt-scope .product-card .product-foot .add-to-cart-button svg {
+  display: block;
+  width: 18px;
+  height: 18px;
+  pointer-events: none;
 }
 .bt-scope .product-card .product-foot .add-to-cart-button:hover {
   background: var(--bt-pea) !important;
@@ -341,6 +343,7 @@ body.type-category main#content.narrow {
 }
 /* fallback "+" jako odkaz na detail (produkt bez košíkového formu) */
 .bt-scope .product-card .add-btn { text-decoration: none; }
+.bt-scope .product-card .add-btn svg { display: block; width: 18px; height: 18px; pointer-events: none; }
 
 /* nedostupné zboží — červená varianta labelu dostupnosti */
 .bt-scope .product-card .availability-label.is-out { color: #C4453A; }
