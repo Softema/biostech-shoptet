@@ -60,7 +60,7 @@
 
   var VAT = 1.21;
 
-  var PLUS_SVG = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
+  var PLUS_SVG = '<svg class="bt-plus-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
 
   var ALL_CATEGORIES = [
     ['rhinoceros-hobby', 'Rhinoceros — Hobby'],
@@ -426,7 +426,10 @@
       var cartBtn = formEl.querySelector('button.add-to-cart-button');
       if (cartBtn) {
         cartBtn.setAttribute('aria-label', 'Přidat ' + name + ' do košíku');
-        if (!cartBtn.querySelector('svg')) cartBtn.insertAdjacentHTML('beforeend', PLUS_SVG);
+        // Shoptet do tlačítka někdy vkládá vlastní (i skrytou) ikonu/spinner —
+        // tu vždy odstraníme a nahradíme naší plus ikonou, ať vypadá cokoliv.
+        cartBtn.querySelectorAll('svg, i, .icon, .spinner, .loader').forEach(function (el) { el.remove(); });
+        cartBtn.insertAdjacentHTML('beforeend', PLUS_SVG);
       }
     } else {
       var fallback = document.createElement('a');
