@@ -394,7 +394,10 @@
   function buildRelated() {
     if (!lineHref) return;
     var section = document.createElement('section');
-    section.className = 'related-section bt-scope-detail';
+    // POZOR: bt-scope je nutný — styly karet (.product-image position:relative,
+    // aspect-ratio…) žijí v components.css pod .bt-scope; bez něj se absolutní
+    // overlay <a inset:0> ukotví k celé stránce a fotka překryje layout
+    section.className = 'related-section bt-scope bt-scope-detail';
     section.innerHTML = '<div class="container"><div class="section-head"><div><span class="eyebrow">Související stroje</span><h2 style="margin-top:12px;font-size:36px;">Mohlo by se vám hodit</h2></div></div><div class="products"></div></div>';
     var grid = section.querySelector('.products');
 
