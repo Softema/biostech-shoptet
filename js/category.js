@@ -17,6 +17,16 @@
      (badge = štítek linie na kartách produktů v této kategorii)
      ----------------------------------------------------------- */
   var CATS = {
+    'malotraktory': {
+      title: 'Malotraktory',
+      sub: 'Nová generace strojů pro vaši práci. Vyberte. Porovnejte. Vyzkoušejte.',
+      badge: { label: 'Malotraktory', cls: '' }
+    },
+    'nove-malotraktory': {
+      title: 'Nové malotraktory',
+      sub: 'Nové stroje skladem — s SPZ a plnou zárukou.',
+      badge: { label: 'Novinka', cls: 'pl-hobby' }
+    },
     'rhinoceros-hobby': {
       title: 'Rhinoceros · Hobby řada',
       sub: 'Pro zahrady, sady a menší pozemky. Cesta začíná tady.',
@@ -81,6 +91,8 @@
   }
 
   var ALL_CATEGORIES = [
+    ['malotraktory', 'Malotraktory'],
+    ['nove-malotraktory', 'Nové malotraktory'],
     ['rhinoceros-hobby', 'Rhinoceros — Hobby'],
     ['m3-hobby-profi', 'M3 — Hobby/Profi'],
     ['ace-profi', 'ACE Profi'],
