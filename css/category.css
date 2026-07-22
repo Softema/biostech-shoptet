@@ -330,7 +330,12 @@ body.type-category main#content.narrow {
   transition: background .15s, transform .15s;
 }
 .bt-scope .product-card .product-foot .add-to-cart-button span { display: none !important; }
-.bt-scope .product-card .product-foot .add-to-cart-button svg {
+.bt-scope .product-card .product-foot .add-to-cart-button svg:not(.bt-plus-icon),
+.bt-scope .product-card .product-foot .add-to-cart-button i,
+.bt-scope .product-card .product-foot .add-to-cart-button .icon {
+  display: none !important;
+}
+.bt-scope .product-card .product-foot .add-to-cart-button svg.bt-plus-icon {
   display: block;
   width: 18px;
   height: 18px;
@@ -343,7 +348,7 @@ body.type-category main#content.narrow {
 }
 /* fallback "+" jako odkaz na detail (produkt bez košíkového formu) */
 .bt-scope .product-card .add-btn { text-decoration: none; }
-.bt-scope .product-card .add-btn svg { display: block; width: 18px; height: 18px; pointer-events: none; }
+.bt-scope .product-card .add-btn svg.bt-plus-icon { display: block; width: 18px; height: 18px; pointer-events: none; }
 
 /* nedostupné zboží — červená varianta labelu dostupnosti */
 .bt-scope .product-card .availability-label.is-out { color: #C4453A; }
