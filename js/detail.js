@@ -478,6 +478,19 @@
 
     var related = buildRelated();
     if (related) root.appendChild(related);
+
+    /* Shoptet za běhu (i PO našem init) vytváří zoom/lightbox elementy
+       nad skrytou nativní galerií — aktivně je odstraňujeme a hlídáme,
+       kdyby je vytvořil znovu (CSS pojistka na ně míří taky). */
+    function nukeZoomArtifacts() {
+      document.querySelectorAll('#wrap, .mousetrap, .cloud-zoom-big, .cloud-zoom-lens, .cloud-zoom-wrap').forEach(function (el) {
+        if (!root.contains(el)) el.remove();
+      });
+    }
+    nukeZoomArtifacts();
+    if (window.MutationObserver) {
+      new MutationObserver(nukeZoomArtifacts).observe(document.body, { childList: true, subtree: true });
+    }
   }
 
   if (document.readyState === 'loading') {
