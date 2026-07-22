@@ -134,7 +134,7 @@
     var thumbsHtml = thumbLinks.map(function (a, i) {
       var img = a.querySelector('img');
       var alt = img ? img.getAttribute('alt') : '';
-      var small = img ? (img.getAttribute('src') || img.getAttribute('data-src')) : '';
+      var small = img ? (img.getAttribute('data-src') || img.getAttribute('src')) : '';
       var big = a.getAttribute('href') || small;
       return '<div class="p-thumb' + (i === 0 ? ' active' : '') + '" data-big="' + esc(big) + '" data-alt="' + esc(alt) + '">' +
         (small ? '<img src="' + esc(small) + '" alt="' + esc(alt) + '" loading="lazy">' : '') +
