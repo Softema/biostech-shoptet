@@ -330,6 +330,15 @@ body.type-category main#content.narrow {
   transition: background .15s, transform .15s;
 }
 .bt-scope .product-card .product-foot .add-to-cart-button span { display: none !important; }
+/* KLÍČOVÉ: Disco kreslí ikonu košíku/šipky ikonovým fontem přes ::before
+   (.btn.add-to-cart-button:before { content:"\e910" }) — není to element
+   v DOMu, takže ji nejde odstranit JS-em. Musí se zabít tady: */
+.bt-scope .product-card .product-foot .add-to-cart-button::before,
+.bt-scope .product-card .product-foot .add-to-cart-button::after {
+  content: none !important;
+  display: none !important;
+  margin: 0 !important;
+}
 .bt-scope .product-card .product-foot .add-to-cart-button svg:not(.bt-plus-icon),
 .bt-scope .product-card .product-foot .add-to-cart-button i,
 .bt-scope .product-card .product-foot .add-to-cart-button .icon {
