@@ -1,0 +1,377 @@
+/* =============================================================
+   BIOS TECH — category.css
+   Restyl stránky kategorie (výpis produktů) podle prototypu.
+   Scope: body.type-category (třídu dává sám Shoptet, žádný FOUC)
+   ============================================================= */
+
+/* -------------------------------------------------------------
+   1) SKRÝT vše nativní, co v návrhu není
+   ------------------------------------------------------------- */
+body.type-category .breadcrumbs-wrapper,          /* nativní drobečky (máme je v heru) */
+body.type-category .category-top,                 /* nativní H1 + blok "Nejprodávanější" */
+body.type-category #category-header,              /* nativní řazení + počet (čteme z něj data, zůstává v DOM) */
+body.type-category #filters-wrapper,
+body.type-category aside.sidebar.sidebar-left,    /* nativní sidebar (formuláře v něm dál používáme) */
+body.type-category [class*="benefitBanner"],      /* dárky / výdejní místa pod výpisem */
+body.type-category .category-appendix,
+body.type-category .category-perex {
+  display: none !important;
+}
+
+/* -------------------------------------------------------------
+   2) Normalizace nativního layoutu (obsah na plnou šířku)
+   ------------------------------------------------------------- */
+body.type-category .content-wrapper-in {
+  display: block !important;
+}
+body.type-category main#content,
+body.type-category main#content.narrow {
+  width: 100% !important;
+  max-width: none !important;
+  float: none !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* -------------------------------------------------------------
+   3) CAT HERO (tmavá hlavička kategorie)
+   ------------------------------------------------------------- */
+.bt-scope .cat-hero {
+  background: var(--bt-black);
+  color: var(--bt-white);
+  padding: 56px 0 64px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+  /* full-bleed pojistka (stejný trik jako u hero na homepage) */
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+}
+.bt-scope .cat-hero .breadcrumb {
+  color: rgba(255,255,255,0.5);
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.bt-scope .cat-hero .breadcrumb a { color: rgba(255,255,255,0.7); text-decoration: none; }
+.bt-scope .cat-hero .breadcrumb a:hover { color: var(--bt-white); }
+.bt-scope .cat-hero .breadcrumb .sep { opacity: 0.5; }
+.bt-scope .cat-hero .breadcrumb .current { color: var(--bt-white); font-weight: 600; }
+.bt-scope .cat-hero h1 {
+  font-size: clamp(36px, 5vw, 64px);
+  color: var(--bt-white);
+  margin: 18px 0 0;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+}
+.bt-scope .cat-hero p {
+  max-width: 560px;
+  color: var(--bt-chrome);
+  font-size: 16px;
+  margin: 16px 0 0;
+}
+.bt-scope .cat-hero .cat-meta {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--bt-chrome);
+}
+.bt-scope .cat-hero .cat-meta strong { color: var(--bt-white); }
+.bt-scope .cat-hero .cat-meta .cat-meta-ace { color: var(--ace-orange); font-weight: 600; }
+
+/* -------------------------------------------------------------
+   4) LAYOUT: sidebar + sloupec s produkty
+   ------------------------------------------------------------- */
+.bt-scope .category-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 40px;
+  padding-bottom: 80px;
+}
+@media (max-width: 900px) {
+  .bt-scope .category-layout { grid-template-columns: 1fr; }
+  .bt-scope .sidebar-filters { position: static !important; }
+}
+
+/* -------------------------------------------------------------
+   5) SIDEBAR FILTRY
+   ------------------------------------------------------------- */
+.bt-scope .sidebar-filters {
+  position: sticky;
+  top: 124px;
+  align-self: start;
+}
+.bt-scope .filter-block {
+  border-bottom: 1px solid var(--bt-line);
+  padding: 20px 0;
+}
+.bt-scope .filter-block:first-child { padding-top: 0; }
+.bt-scope .filter-block:last-of-type { border-bottom: 0; }
+.bt-scope .filter-title {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--bt-black);
+  margin-bottom: 14px;
+}
+.bt-scope .filter-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  font-size: 14px;
+  cursor: pointer;
+  color: var(--bt-anthracite);
+  gap: 12px;
+}
+.bt-scope .filter-option:hover { color: var(--bt-black); }
+.bt-scope .filter-option .label-wrap { display: flex; align-items: center; gap: 10px; }
+.bt-scope .filter-option .count { font-size: 12px; color: #8B8F95; }
+.bt-scope .filter-option input[type="checkbox"],
+.bt-scope .filter-option input[type="radio"] { display: none; }
+.bt-scope .filter-checkbox {
+  width: 18px; height: 18px;
+  border: 1.5px solid #C5C8CC;
+  border-radius: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all .15s;
+}
+.bt-scope .filter-option input:checked + .filter-checkbox {
+  background: var(--bt-black);
+  border-color: var(--bt-black);
+}
+.bt-scope .filter-option input:checked + .filter-checkbox::after {
+  content: "\2713";
+  color: var(--bt-pea);
+  font-size: 12px;
+  font-weight: 700;
+}
+.bt-scope .filter-radio {
+  width: 18px; height: 18px;
+  border: 1.5px solid #C5C8CC;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.bt-scope .filter-option input:checked + .filter-radio { border-color: var(--bt-black); }
+.bt-scope .filter-option input:checked + .filter-radio::after {
+  content: "";
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: var(--bt-pea);
+}
+.bt-scope .filter-ace-dot { color: var(--ace-orange); margin-left: 6px; font-size: 10px; }
+
+.bt-scope .price-range { display: flex; gap: 8px; margin-top: 12px; }
+.bt-scope .price-range input {
+  flex: 1;
+  border: 1px solid var(--bt-line);
+  background: var(--bt-paper);
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  width: 0;
+}
+.bt-scope .price-range input:focus {
+  outline: none;
+  border-color: var(--bt-black);
+  background: var(--bt-white);
+}
+.bt-scope .filter-note { font-size: 11px; color: #6B6F75; margin-top: 8px; }
+
+/* -------------------------------------------------------------
+   6) TOOLBAR (počet, řazení, přepínač zobrazení)
+   ------------------------------------------------------------- */
+.bt-scope .category-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 24px;
+  padding: 16px 20px;
+  background: var(--bt-paper);
+  border-radius: var(--radius-md);
+  flex-wrap: wrap;
+}
+.bt-scope .category-toolbar .result-count { font-size: 13px; color: #6B6F75; }
+.bt-scope .category-toolbar .result-count strong { color: var(--bt-black); }
+.bt-scope .toolbar-right { display: flex; align-items: center; gap: 12px; }
+.bt-scope .toolbar-right label { font-size: 13px; color: #6B6F75; }
+.bt-scope .toolbar-right select {
+  border: 1px solid var(--bt-line);
+  background: var(--bt-white);
+  padding: 8px 30px 8px 12px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%231A1A1A' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  cursor: pointer;
+}
+.bt-scope .toolbar-right select:focus { outline: none; border-color: var(--bt-black); }
+.bt-scope .toolbar-right .view-toggle {
+  display: inline-flex;
+  border: 1px solid var(--bt-line);
+  border-radius: 6px;
+  background: var(--bt-white);
+  overflow: hidden;
+}
+.bt-scope .toolbar-right .view-toggle button {
+  background: transparent;
+  border: 0;
+  padding: 8px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: #6B6F75;
+  cursor: pointer;
+}
+.bt-scope .toolbar-right .view-toggle button.active { background: var(--bt-black); color: var(--bt-pea); }
+.bt-scope .active-filters { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px; }
+.bt-scope .filter-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: var(--bt-black);
+  color: var(--bt-white);
+  border-radius: 100px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+.bt-scope .filter-chip .x { opacity: 0.7; cursor: pointer; }
+
+/* -------------------------------------------------------------
+   7) GRID PRODUKTŮ — přebíjí nativní .products/.product z Disca
+   POZOR: nativní .products má Bootstrap clearfix ::before/::after,
+   při display:grid by se staly grid-itemy (stejná zrada jako u hero)
+   ------------------------------------------------------------- */
+.bt-scope .bt-products-col #products {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+.bt-scope .bt-products-col #products::before,
+.bt-scope .bt-products-col #products::after {
+  content: none !important;
+  display: none !important;
+}
+@media (max-width: 1100px) {
+  .bt-scope .bt-products-col #products { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .bt-scope .bt-products-col #products { grid-template-columns: 1fr; }
+}
+.bt-scope .bt-products-col #products .product {
+  width: 100% !important;
+  max-width: none !important;
+  float: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  display: block;
+}
+.bt-scope .bt-products-col #products .product::before,
+.bt-scope .bt-products-col #products .product::after {
+  content: none !important;
+  display: none !important;
+}
+/* karta je uvnitř .product — musí vyplnit výšku buňky gridu */
+.bt-scope .bt-products-col .product-card { height: 100%; cursor: pointer; }
+.bt-scope .bt-products-col .product-card .product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: center bottom;
+  display: block;
+  pointer-events: none;
+}
+
+/* nativní košíkové tlačítko převléknuté do kulatého "+" */
+.bt-scope .product-card .product-foot form.pr-action { margin: 0; flex-shrink: 0; }
+.bt-scope .product-card .product-foot .add-to-cart-button {
+  width: 40px !important;
+  height: 40px !important;
+  min-width: 0 !important;
+  border-radius: 50% !important;
+  border: 0 !important;
+  background: var(--bt-black) !important;
+  color: var(--bt-white) !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 0 !important;
+  font-size: 0 !important;
+  line-height: 1 !important;
+  transition: background .15s, transform .15s;
+}
+.bt-scope .product-card .product-foot .add-to-cart-button span { display: none !important; }
+.bt-scope .product-card .product-foot .add-to-cart-button::before {
+  content: "+";
+  font-size: 22px;
+  font-weight: 600;
+  line-height: 1;
+}
+.bt-scope .product-card .product-foot .add-to-cart-button:hover {
+  background: var(--bt-pea) !important;
+  color: var(--bt-black) !important;
+  transform: rotate(90deg);
+}
+/* fallback "+" jako odkaz na detail (produkt bez košíkového formu) */
+.bt-scope .product-card .add-btn { text-decoration: none; }
+
+/* nedostupné zboží — červená varianta labelu dostupnosti */
+.bt-scope .product-card .availability-label.is-out { color: #C4453A; }
+.bt-scope .product-card .availability-label.is-out::before { background: #C4453A; }
+
+/* -------------------------------------------------------------
+   8) LIST VIEW (přepínač seznam)
+   ------------------------------------------------------------- */
+.bt-scope .bt-products-col #products.bt-view-list { grid-template-columns: 1fr; }
+.bt-scope #products.bt-view-list .product-card { flex-direction: row; }
+.bt-scope #products.bt-view-list .product-card .product-image {
+  width: 320px;
+  flex-shrink: 0;
+  aspect-ratio: 4 / 3;
+}
+.bt-scope #products.bt-view-list .product-card .product-body { flex: 1; }
+@media (max-width: 640px) {
+  .bt-scope #products.bt-view-list .product-card { flex-direction: column; }
+  .bt-scope #products.bt-view-list .product-card .product-image { width: 100%; }
+}
+
+/* -------------------------------------------------------------
+   9) NAČÍST DALŠÍ STROJE + prázdná kategorie
+   ------------------------------------------------------------- */
+.bt-scope .bt-load-more-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 56px;
+}
+.bt-scope .bt-cat-empty {
+  padding: 48px 0;
+  color: #6B6F75;
+  font-size: 15px;
+}
