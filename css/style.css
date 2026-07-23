@@ -158,7 +158,7 @@ h1, h2, h3, h4, h5, h6 {
    GLOBAL BUTTON OVERRIDES (Shoptet)
    ============================================================= */
 
-.btn, .button, button.btn {
+.btn, .button, a.btn, button.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -166,7 +166,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--bt-black);
   color: var(--bt-white);
   border: 0;
-  border-radius: 100px;
+  border-radius: 100px !important; /* nativní a.btn{border-radius:0} má vyšší specificitu (element+třída) a bez !important vyhrává */
   padding: 14px 24px;
   font-family: inherit;
   font-weight: 600;
@@ -176,7 +176,7 @@ h1, h2, h3, h4, h5, h6 {
   transition: background .15s, transform .1s, box-shadow .15s;
   text-decoration: none;
 }
-.btn:hover, .button:hover, button.btn:hover {
+.btn:hover, .button:hover, a.btn:hover, button.btn:hover {
   background: var(--bt-anthracite);
   color: var(--bt-white);
 }
@@ -187,19 +187,19 @@ h1, h2, h3, h4, h5, h6 {
 .btn.btn-primary:hover, .btn-conversion:hover, .add-to-cart-button:hover {
   background: var(--bt-anthracite);
 }
-.btn-ghost {
+.btn-ghost, a.btn-ghost {
   background: transparent;
   color: var(--bt-black);
-  border: 1px solid var(--bt-black);
+  border: 1px solid var(--bt-black) !important;
 }
-.btn-ghost:hover { background: var(--bt-black); color: var(--bt-white); }
+.btn-ghost:hover, a.btn-ghost:hover { background: var(--bt-black); color: var(--bt-white); }
 .btn-pea {
   background: var(--bt-pea);
   color: var(--bt-black);
 }
 .btn-pea:hover { background: var(--bt-pea-bright); color: var(--bt-black); }
-.btn-sm { padding: 9px 16px; font-size: 13px; }
-.btn-lg { padding: 18px 32px; font-size: 15px; }
+.btn-sm, a.btn-sm { padding: 9px 16px !important; font-size: 13px; }
+.btn-lg, a.btn-lg { padding: 18px 32px !important; font-size: 15px; }
 
 .btn .arrow {
   width: 18px; height: 18px;
