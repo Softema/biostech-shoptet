@@ -66,9 +66,19 @@
     homeLink.textContent = 'Domů';
   }
 
+  var thumbLinks = Array.prototype.slice.call(document.querySelectorAll('.p-thumbnails a.p-thumbnail'));
   var mainImgEl = document.querySelector('a.p-main-image img');
   var mainImgSrc = mainImgEl ? mainImgEl.getAttribute('src') : '';
-  var thumbLinks = Array.prototype.slice.call(document.querySelectorAll('.p-thumbnails a.p-thumbnail'));
+  if (!mainImgSrc && thumbLinks.length) {
+    // Shoptet plní nativní hlavní obrázek vlastním JS AŽ PO načtení (časový
+    // souboj s naším skriptem) — když prohrajeme, .p-image zůstane prázdné
+    // a celá galerie by tiše přestala reagovat na klik/zoom. Proto bereme
+    // spolehlivý zdroj: velkou variantu prvního náhledu, ta je v HTML vždy
+    // hned od začátku (server-rendered, nezávisí na časování žádného skriptu).
+    var firstThumbImg = thumbLinks[0].querySelector('img');
+    mainImgSrc = thumbLinks[0].getAttribute('href') ||
+      (firstThumbImg && (firstThumbImg.getAttribute('data-src') || firstThumbImg.getAttribute('src'))) || '';
+  }
 
   var flagEl = document.querySelector('.p-image .flag, .p-image .p-flags .flag, .extra-flags .flag');
   var flagText = txt(flagEl);
