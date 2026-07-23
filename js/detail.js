@@ -9,7 +9,7 @@
 (function () {
   'use strict';
 
-  if (!document.body.classList.contains('type-detail')) return;
+  if (!document.body.classList.contains('type-detail')) { if (window.__btDone) window.__btDone(); return; }
 
   var VAT = 1.21;
   var PLUS_SVG = '<svg class="bt-plus-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
@@ -44,7 +44,7 @@
   }
 
   var form = document.getElementById('product-detail-form') || document.querySelector('form.pr-action');
-  if (!form) return; // bez formuláře nemá smysl stránku přestavovat
+  if (!form) { if (window.__btDone) window.__btDone(); return; } // bez formuláře nemá smysl stránku přestavovat
 
   /* -----------------------------------------------------------
      Sběr nativních dat
@@ -545,6 +545,7 @@
     if (window.MutationObserver) {
       new MutationObserver(nukeZoomArtifacts).observe(document.body, { childList: true, subtree: true });
     }
+    if (window.__btDone) window.__btDone();
   }
 
   if (document.readyState === 'loading') {
