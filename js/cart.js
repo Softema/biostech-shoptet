@@ -8,8 +8,7 @@
 (function () {
   'use strict';
 
-  var cartWrapper = document.getElementById('cart-wrapper');
-  if (!cartWrapper || !document.body.classList.contains('ordering-process')) { if (window.__btDone) window.__btDone(); return; }
+  if (!document.body.classList.contains('ordering-process')) { if (window.__btDone) window.__btDone(); return; }
 
   var VAT = 1.21;
   var PLUS_SVG = '<svg class="bt-plus-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
@@ -231,9 +230,19 @@
   /* -----------------------------------------------------------
      Init
      ----------------------------------------------------------- */
-  function init() {
-    if (document.getElementById('bt-cart-root')) return;
-    var rows = Array.prototype.slice.call(document.querySelectorAll('table.cart-table tbody > tr[data-micro="cartItem"]'));
+  function buildEmptyState(cw) {
+    var emptyBox = cw.querySelector('.cart-inner.cart-empty');
+    var links = emptyBox ? Array.prototype.slice.call(emptyBox.querySelectorAll('.empty-cart-boxes a')) : [];
+    var linksHtml = links.length
+      ? '<div class="cart-empty-links">' + links.map(function (a) {
+          return '<a href="' + esc(a.getAttribute('href')) + '">' + esc(txt(a)) + '</a>';
+        }).join('') + '</div>'
+      : '';
+    return '<div class="cart-empty"><p>Váš košík je prázdný.</p>' + linksHtml + '<a class="btn" href="/">Zpět do obchodu</a></div>';
+  }
+
+  function buildPage(cw) {
+    var rows = Array.prototype.slice.call(cw.querySelectorAll('table.cart-table tbody > tr[data-micro="cartItem"]'));
 
     var root = document.createElement('div');
     root.className = 'bt-scope-cart';
@@ -250,8 +259,7 @@
     root.innerHTML = hero + '<div class="cart-layout"><div><div class="cart-table-card bt-slot-rows"></div><div class="cart-extras bt-slot-extras"></div><div class="bt-slot-related"></div></div><div class="bt-slot-summary"></div></div>';
 
     if (!rows.length) {
-      root.querySelector('.cart-layout').innerHTML =
-        '<div class="cart-empty"><p>Váš košík je prázdný.</p><a class="btn" href="/">Zpět do obchodu</a></div>';
+      root.querySelector('.cart-layout').innerHTML = buildEmptyState(cw);
     } else {
       var rowsHost = root.querySelector('.bt-slot-rows');
       rows.forEach(function (row) { rowsHost.appendChild(buildRow(row)); });
@@ -265,9 +273,40 @@
       root.querySelector('.bt-slot-summary').replaceWith(buildSummary());
     }
 
-    cartWrapper.parentNode.insertBefore(root, cartWrapper);
-    cartWrapper.style.display = 'none';
+    cw.parentNode.insertBefore(root, cw);
+    cw.style.display = 'none';
+  }
+
+  /* Shoptet mění obsah košíku (smazání položky, změna počtu) přes AJAX —
+     stránka se znovu nenačte, takže náš jednorázový skript by o změně
+     nevěděl. Proto vždy znovu sestavíme z AKTUÁLNÍHO nativního stavu. */
+  function rebuild() {
+    var stale = document.getElementById('bt-cart-root');
+    if (stale) stale.remove();
+    var cw = document.getElementById('cart-wrapper');
+    if (!cw) return;
+    cw.style.display = '';
+    buildPage(cw);
+  }
+
+  function init() {
+    rebuild();
     if (window.__btDone) window.__btDone();
+
+    if (window.MutationObserver) {
+      var observer = new MutationObserver(function (mutations) {
+        var root = document.getElementById('bt-cart-root');
+        // smazaný uzel je v okamžiku, kdy pozorovatel běží, už vždy odpojený
+        // ze stromu — kontrolovat lze jen rodiče (m.target), ten zůstává platný
+        var relevant = mutations.some(function (m) { return !(root && root.contains(m.target)); });
+        if (!relevant) return;
+        // odpojit, ať naše vlastní úpravy DOMu nespustí pozorovatele samy na sebe
+        observer.disconnect();
+        rebuild();
+        observer.observe(document.body, { childList: true, subtree: true });
+      });
+      observer.observe(document.body, { childList: true, subtree: true });
+    }
   }
 
   if (document.readyState === 'loading') {
