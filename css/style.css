@@ -158,7 +158,9 @@ h1, h2, h3, h4, h5, h6 {
    GLOBAL BUTTON OVERRIDES (Shoptet)
    ============================================================= */
 
-.btn, .button, a.btn, button.btn {
+.bt-scope .btn, .bt-scope .button, .bt-scope a.btn, .bt-scope button.btn,
+.bt-scope-detail .btn, .bt-scope-detail .button, .bt-scope-detail a.btn, .bt-scope-detail button.btn,
+.bt-scope-cart .btn, .bt-scope-cart .button, .bt-scope-cart a.btn, .bt-scope-cart button.btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -176,37 +178,47 @@ h1, h2, h3, h4, h5, h6 {
   transition: background .15s, transform .1s, box-shadow .15s;
   text-decoration: none;
 }
-.btn:hover, .button:hover, a.btn:hover, button.btn:hover {
+.bt-scope .btn:hover, .bt-scope .button:hover, .bt-scope a.btn:hover, .bt-scope button.btn:hover,
+.bt-scope-detail .btn:hover, .bt-scope-detail .button:hover, .bt-scope-detail a.btn:hover, .bt-scope-detail button.btn:hover,
+.bt-scope-cart .btn:hover, .bt-scope-cart .button:hover, .bt-scope-cart a.btn:hover, .bt-scope-cart button.btn:hover {
   background: var(--bt-anthracite);
   color: var(--bt-white);
 }
-.btn.btn-primary, .btn-conversion, .add-to-cart-button, .next-step .btn {
+.bt-scope .btn.btn-primary, .bt-scope .btn-conversion, .bt-scope .add-to-cart-button,
+.bt-scope-detail .btn.btn-primary, .bt-scope-detail .btn-conversion, .bt-scope-detail .add-to-cart-button,
+.bt-scope-cart .btn.btn-primary, .bt-scope-cart .btn-conversion, .bt-scope-cart .add-to-cart-button {
   background: var(--bt-black);
   color: var(--bt-white);
 }
-.btn.btn-primary:hover, .btn-conversion:hover, .add-to-cart-button:hover {
+.bt-scope .btn.btn-primary:hover, .bt-scope .btn-conversion:hover, .bt-scope .add-to-cart-button:hover,
+.bt-scope-detail .btn.btn-primary:hover, .bt-scope-detail .btn-conversion:hover, .bt-scope-detail .add-to-cart-button:hover,
+.bt-scope-cart .btn.btn-primary:hover, .bt-scope-cart .btn-conversion:hover, .bt-scope-cart .add-to-cart-button:hover {
   background: var(--bt-anthracite);
 }
-.btn-ghost, a.btn-ghost {
+.bt-scope .btn-ghost, .bt-scope a.btn-ghost,
+.bt-scope-detail .btn-ghost, .bt-scope-detail a.btn-ghost,
+.bt-scope-cart .btn-ghost, .bt-scope-cart a.btn-ghost {
   background: transparent;
   color: var(--bt-black);
   border: 1px solid var(--bt-black) !important;
 }
-.btn-ghost:hover, a.btn-ghost:hover { background: var(--bt-black); color: var(--bt-white); }
-.btn-pea {
+.bt-scope .btn-ghost:hover, .bt-scope a.btn-ghost:hover,
+.bt-scope-detail .btn-ghost:hover, .bt-scope-detail a.btn-ghost:hover,
+.bt-scope-cart .btn-ghost:hover, .bt-scope-cart a.btn-ghost:hover { background: var(--bt-black); color: var(--bt-white); }
+.bt-scope .btn-pea, .bt-scope-detail .btn-pea, .bt-scope-cart .btn-pea {
   background: var(--bt-pea);
   color: var(--bt-black);
 }
-.btn-pea:hover { background: var(--bt-pea-bright); color: var(--bt-black); }
-.btn-sm, a.btn-sm { padding: 9px 16px !important; font-size: 13px; }
-.btn-lg, a.btn-lg { padding: 18px 32px !important; font-size: 15px; }
+.bt-scope .btn-pea:hover, .bt-scope-detail .btn-pea:hover, .bt-scope-cart .btn-pea:hover { background: var(--bt-pea-bright); color: var(--bt-black); }
+.bt-scope .btn-sm, .bt-scope a.btn-sm, .bt-scope-detail .btn-sm, .bt-scope-detail a.btn-sm, .bt-scope-cart .btn-sm, .bt-scope-cart a.btn-sm { padding: 9px 16px !important; font-size: 13px; }
+.bt-scope .btn-lg, .bt-scope a.btn-lg, .bt-scope-detail .btn-lg, .bt-scope-detail a.btn-lg, .bt-scope-cart .btn-lg, .bt-scope-cart a.btn-lg { padding: 18px 32px !important; font-size: 15px; }
 
-.btn .arrow {
+.bt-scope .btn .arrow, .bt-scope-detail .btn .arrow, .bt-scope-cart .btn .arrow {
   width: 18px; height: 18px;
   display: inline-block;
   position: relative;
 }
-.btn .arrow::after {
+.bt-scope .btn .arrow::after, .bt-scope-detail .btn .arrow::after, .bt-scope-cart .btn .arrow::after {
   content: "→";
   position: absolute;
   inset: 0;
@@ -215,5 +227,4 @@ h1, h2, h3, h4, h5, h6 {
   justify-content: center;
   transition: transform .2s;
 }
-.btn:hover .arrow::after { transform: translateX(3px); }
-
+.bt-scope .btn:hover .arrow::after, .bt-scope-detail .btn:hover .arrow::after, .bt-scope-cart .btn:hover .arrow::after { transform: translateX(3px); }
