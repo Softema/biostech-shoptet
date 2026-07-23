@@ -9,7 +9,7 @@
   'use strict';
 
   var cartWrapper = document.getElementById('cart-wrapper');
-  if (!cartWrapper || !document.body.classList.contains('ordering-process')) return;
+  if (!cartWrapper || !document.body.classList.contains('ordering-process')) { if (window.__btDone) window.__btDone(); return; }
 
   var VAT = 1.21;
   var PLUS_SVG = '<svg class="bt-plus-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
@@ -267,6 +267,7 @@
 
     cartWrapper.parentNode.insertBefore(root, cartWrapper);
     cartWrapper.style.display = 'none';
+    if (window.__btDone) window.__btDone();
   }
 
   if (document.readyState === 'loading') {
