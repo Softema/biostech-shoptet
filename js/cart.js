@@ -69,9 +69,7 @@
     var availText = txt(availEl);
     var inStock = !/nedostupn/i.test(availText);
 
-    var unitPriceEl = row.querySelector('.p-price .price-final');
     var totalPriceEl = row.querySelector('.p-total .price-final');
-    var unitPriceText = txt(unitPriceEl);
     var totalPriceNum = parseKc(txt(totalPriceEl));
 
     var qtyForm = row.querySelector('.p-quantity form.quantity-form');
@@ -89,7 +87,7 @@
         '</div>' +
       '</div>' +
       '<div class="ci-qty"><span class="bt-slot-qty"></span></div>' +
-      '<div class="ci-price">' + esc(unitPriceText) + '<small>' + (isNaN(totalPriceNum) ? '' : fmtKc(totalPriceNum / VAT) + ' bez DPH') + '</small></div>' +
+      '<div class="ci-price">' + esc(txt(totalPriceEl)) + '<small>' + (isNaN(totalPriceNum) ? '' : fmtKc(totalPriceNum / VAT) + ' bez DPH') + '</small></div>' +
       '<div class="ci-remove-slot"><span class="bt-slot-remove"></span></div>';
 
     if (qtyForm) {
