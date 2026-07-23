@@ -106,7 +106,7 @@ body.type-detail .breadcrumbs-wrapper .appendix { display: none; }
 /* --- galerie --- */
 .bt-scope-detail .p-gallery {
   display: grid;
-  grid-template-columns: 96px 1fr;
+  grid-template-columns: 104px 1fr;
   gap: 16px;
 }
 @media (max-width: 600px) {
@@ -121,8 +121,12 @@ body.type-detail .breadcrumbs-wrapper .appendix { display: none; }
      omezíme na výšku hlavního obrázku a scrollujeme uvnitř */
   max-height: 560px;
   overflow-y: auto;
+  overflow-x: hidden; /* bez tohoto prohlížeč automaticky dopočítá overflow-x:auto
+    (kdykoliv je overflow-y jiný než visible) — a pevná šířka náhledu pak
+    o pár px přetekla přes sloupec zúžený vertikálním scrollbarem */
   overscroll-behavior: contain;
   padding-right: 4px;
+  box-sizing: border-box;
   scrollbar-width: thin;
   scrollbar-color: var(--bt-line) transparent;
 }
@@ -130,7 +134,9 @@ body.type-detail .breadcrumbs-wrapper .appendix { display: none; }
 .bt-scope-detail .p-thumbs::-webkit-scrollbar-thumb { background: var(--bt-line); border-radius: 3px; }
 .bt-scope-detail .p-thumbs::-webkit-scrollbar-track { background: transparent; }
 .bt-scope-detail .p-thumbs .p-thumb {
-  width: 96px; height: 96px;
+  width: 100%; aspect-ratio: 1; height: auto; /* % místo pevných px — vždy sedí
+    do skutečně dostupného prostoru, ať scrollbar zabere jakoukoliv šířku */
+  box-sizing: border-box;
   border-radius: var(--radius-md);
   background: var(--bt-paper-warm);
   border: 1px solid var(--bt-line);
@@ -227,17 +233,22 @@ body.type-detail .breadcrumbs-wrapper .appendix { display: none; }
 }
 /* KLÍČOVÁ (už čtvrtá) past stejného typu: nativní CSS schová textové "+"/"−"
    (.increase__sign/.decrease__sign{display:none}) a nakreslí vlastní ikonu
-   přes ::before ikonovým fontem (content:"\e911"/"\e90e") — tu zabijeme
-   a odkryjeme původní text, který v DOMu reálně je. */
+   přes ::before ikonovým fontem (content:"\e911"/"\e90e"). Tu zabijeme.
+   Text glyf "+"/"−" navíc není nikdy opticky vystředěný přes CSS (stejná
+   zkušenost jako u tlačítka košíku) — JS proto vkládá skutečnou SVG ikonu
+   a __sign span rovnou odstraňuje z DOMu. */
 .bt-scope-detail .p-cta-row .quantity .decrease::before,
 .bt-scope-detail .p-cta-row .quantity .increase::before {
   content: none !important;
 }
 .bt-scope-detail .p-cta-row .quantity .decrease__sign,
 .bt-scope-detail .p-cta-row .quantity .increase__sign {
-  display: inline-block !important;
-  font-size: 18px !important;
-  line-height: 1 !important;
+  display: none !important;
+}
+.bt-scope-detail .p-cta-row .quantity .decrease svg.bt-plus-icon,
+.bt-scope-detail .p-cta-row .quantity .increase svg.bt-plus-icon {
+  display: block;
+  pointer-events: none;
 }
 .bt-scope-detail .p-cta-row .quantity .decrease:hover,
 .bt-scope-detail .p-cta-row .quantity .increase:hover { color: var(--bt-pea-deep); }
@@ -355,3 +366,44 @@ body.type-detail .breadcrumbs-wrapper .appendix { display: none; }
   max-width: 100%;
   max-height: 100%;
 }
+
+/* -------------------------------------------------------------
+   7) LIGHTBOX (zvětšení fotky přímo na stránce, ne nové okno)
+   ------------------------------------------------------------- */
+.bt-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: rgba(20, 20, 18, 0.92);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .18s ease;
+}
+.bt-lightbox.open { opacity: 1; visibility: visible; }
+.bt-lightbox-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  border-radius: 8px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.bt-lightbox-close {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 0;
+  background: rgba(255,255,255,0.12);
+  color: var(--bt-white);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.bt-lightbox-close:hover { background: rgba(255,255,255,0.22); }
