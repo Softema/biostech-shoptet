@@ -13,6 +13,8 @@
 
   var VAT = 1.21;
   var PLUS_SVG = '<svg class="bt-plus-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
+  var MINUS_SVG = '<svg class="bt-plus-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"></path></svg>';
+  var QTY_PLUS_SVG = '<svg class="bt-plus-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
 
   function esc(s) {
     return String(s == null ? '' : s)
@@ -161,6 +163,32 @@
     '</div>';
   }
 
+  var lightboxEl = null;
+  function ensureLightbox() {
+    if (lightboxEl) return lightboxEl;
+    lightboxEl = document.createElement('div');
+    lightboxEl.className = 'bt-lightbox';
+    lightboxEl.innerHTML =
+      '<button type="button" class="bt-lightbox-close" aria-label="Zavřít">' +
+        '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"></path></svg>' +
+      '</button>' +
+      '<img class="bt-lightbox-img" src="" alt="">';
+    document.body.appendChild(lightboxEl);
+    function close() { lightboxEl.classList.remove('open'); }
+    lightboxEl.querySelector('.bt-lightbox-close').addEventListener('click', close);
+    lightboxEl.addEventListener('click', function (e) { if (e.target === lightboxEl) close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    return lightboxEl;
+  }
+  function openLightbox(src, alt) {
+    if (!src) return;
+    var lb = ensureLightbox();
+    var img = lb.querySelector('.bt-lightbox-img');
+    img.src = src;
+    img.alt = alt || '';
+    lb.classList.add('open');
+  }
+
   function wireGallery(host) {
     var mainImg = host.querySelector('.p-main-img img');
     var zoomBtn = host.querySelector('.p-zoom');
@@ -172,10 +200,17 @@
         if (mainImg && big) { mainImg.src = big; mainImg.alt = thumb.getAttribute('data-alt') || productName; }
       });
     });
+    // klik na lupu I na samotnou fotku otevře zvětšení přímo na stránce
+    // (ne nové okno prohlížeče — to byl matoucí zážitek)
     if (zoomBtn) zoomBtn.addEventListener('click', function () {
-      var src = mainImg ? mainImg.src : '';
-      if (src) window.open(src, '_blank');
+      openLightbox(mainImg ? mainImg.src : '', mainImg ? mainImg.alt : '');
     });
+    if (mainImg) {
+      mainImg.style.cursor = 'zoom-in';
+      mainImg.addEventListener('click', function () {
+        openLightbox(mainImg.src, mainImg.alt);
+      });
+    }
   }
 
   function parseOptions() {
@@ -286,6 +321,12 @@
       if (formId) {
         qtyBlock.querySelectorAll('input, button').forEach(function (el) { el.setAttribute('form', formId); });
       }
+      // nativní +/− text (__sign span) není nikdy opticky vystředěný přes CSS
+      // (stejný jev jako u tlačítka košíku) — nahrazujeme skutečnou SVG ikonou
+      var incBtn = qtyBlock.querySelector('.increase');
+      var decBtn = qtyBlock.querySelector('.decrease');
+      if (incBtn) { var incSign = incBtn.querySelector('.increase__sign'); if (incSign) incSign.remove(); incBtn.insertAdjacentHTML('beforeend', QTY_PLUS_SVG); }
+      if (decBtn) { var decSign = decBtn.querySelector('.decrease__sign'); if (decSign) decSign.remove(); decBtn.insertAdjacentHTML('beforeend', MINUS_SVG); }
       infoEl.querySelector('.bt-slot-qty').replaceWith(qtyBlock);
     }
     if (submitBtn) {
