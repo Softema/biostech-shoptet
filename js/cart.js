@@ -259,7 +259,9 @@
     root.innerHTML = hero + '<div class="cart-layout"><div><div class="cart-table-card bt-slot-rows"></div><div class="cart-extras bt-slot-extras"></div><div class="bt-slot-related"></div></div><div class="bt-slot-summary"></div></div>';
 
     if (!rows.length) {
-      root.querySelector('.cart-layout').innerHTML = buildEmptyState(cw);
+      var layoutEl = root.querySelector('.cart-layout');
+      layoutEl.classList.add('is-empty');
+      layoutEl.innerHTML = buildEmptyState(cw);
     } else {
       var rowsHost = root.querySelector('.bt-slot-rows');
       rows.forEach(function (row) { rowsHost.appendChild(buildRow(row)); });
@@ -293,6 +295,11 @@
     rebuild();
     if (window.__btDone) window.__btDone();
 
+    // sledujeme jen stabilního rodiče #cart-wrapper, ne celou stránku —
+    // jinak by JAKÁKOLIV nesouvisející změna na webu (počítadlo v hlavičce,
+    // chat widget, tracker) spustila přestavbu, která nenávratně zahodí
+    // už přesunutá nativní tlačítka (pokračovat, smazat) uvnitř staré vrstvy
+    var watchTarget = (document.getElementById('cart-wrapper') || {}).parentNode || document.body;
     if (window.MutationObserver) {
       var observer = new MutationObserver(function (mutations) {
         var root = document.getElementById('bt-cart-root');
@@ -303,9 +310,9 @@
         // odpojit, ať naše vlastní úpravy DOMu nespustí pozorovatele samy na sebe
         observer.disconnect();
         rebuild();
-        observer.observe(document.body, { childList: true, subtree: true });
+        observer.observe(watchTarget, { childList: true, subtree: true });
       });
-      observer.observe(document.body, { childList: true, subtree: true });
+      observer.observe(watchTarget, { childList: true, subtree: true });
     }
   }
 
