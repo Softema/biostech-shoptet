@@ -84,6 +84,7 @@ body.ordering-process .row.cart-row > [class*="col-"] {
   gap: 40px;
   padding-bottom: 80px;
 }
+.bt-scope-cart .cart-layout.is-empty { display: block; }
 @media (max-width: 900px) {
   .bt-scope-cart .cart-layout { grid-template-columns: 1fr; }
   .bt-scope-cart .cart-summary { position: static !important; }
