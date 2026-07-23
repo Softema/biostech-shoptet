@@ -223,6 +223,21 @@ body.type-detail .breadcrumbs-wrapper .appendix { display: none; }
   border: 0; background: transparent; width: 44px; height: 100%;
   font-size: 18px; font-weight: 600; cursor: pointer; color: var(--bt-black);
   position: static !important; margin: 0 !important; padding: 0 !important;
+  display: inline-flex !important; align-items: center; justify-content: center;
+}
+/* KLÍČOVÁ (už čtvrtá) past stejného typu: nativní CSS schová textové "+"/"−"
+   (.increase__sign/.decrease__sign{display:none}) a nakreslí vlastní ikonu
+   přes ::before ikonovým fontem (content:"\e911"/"\e90e") — tu zabijeme
+   a odkryjeme původní text, který v DOMu reálně je. */
+.bt-scope-detail .p-cta-row .quantity .decrease::before,
+.bt-scope-detail .p-cta-row .quantity .increase::before {
+  content: none !important;
+}
+.bt-scope-detail .p-cta-row .quantity .decrease__sign,
+.bt-scope-detail .p-cta-row .quantity .increase__sign {
+  display: inline-block !important;
+  font-size: 18px !important;
+  line-height: 1 !important;
 }
 .bt-scope-detail .p-cta-row .quantity .decrease:hover,
 .bt-scope-detail .p-cta-row .quantity .increase:hover { color: var(--bt-pea-deep); }
@@ -320,7 +335,7 @@ body.type-detail .breadcrumbs-wrapper .appendix { display: none; }
    6) SOUVISEJÍCÍ STROJE
    ------------------------------------------------------------- */
 .bt-scope-detail .related-section,
-.related-section.bt-scope-detail { margin-top: 80px; }
+.related-section.bt-scope-detail { margin-top: 80px; padding-bottom: 80px; }
 .bt-scope-detail .related-section .products,
 .related-section.bt-scope-detail .products { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
 @media (max-width: 1100px) { .bt-scope-detail .related-section .products, .related-section.bt-scope-detail .products { grid-template-columns: repeat(2, 1fr); } }
