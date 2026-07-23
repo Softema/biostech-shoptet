@@ -10,7 +10,7 @@
 (function () {
   'use strict';
 
-  if (!document.body.classList.contains('type-category')) return;
+  if (!document.body.classList.contains('type-category')) { if (window.__btDone) window.__btDone(); return; }
 
   /* -----------------------------------------------------------
      KONFIGURACE — texty hera podle slugu kategorie
@@ -590,6 +590,7 @@
         document.querySelectorAll('#products > .product:not([data-bt-done])').forEach(transformProduct);
       }).observe(products, { childList: true });
     }
+    if (window.__btDone) window.__btDone();
   }
 
   if (document.readyState === 'loading') {
