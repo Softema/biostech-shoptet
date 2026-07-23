@@ -1,0 +1,262 @@
+/* =============================================================
+   BIOS TECH — cart.css
+   Restyl nákupního košíku podle prototypu.
+   Scope: body.ordering-process + #cart-wrapper (jen stránka košíku,
+   ne další kroky objednávky, které mají jinou strukturu)
+   ============================================================= */
+
+/* -------------------------------------------------------------
+   1) SKRÝT nativní bloky, které nahrazujeme
+   ------------------------------------------------------------- */
+body.ordering-process #cart-wrapper .cart-header,     /* nativní kroky (přestavujeme) */
+body.ordering-process #cart-wrapper h1.sr-only,
+body.ordering-process #cart-wrapper .checkout-box-wrapper, /* "Potřebujete pomoc?" — není ve vzoru */
+body.ordering-process #cart-wrapper .p-label,          /* mobilní popisky sloupců tabulky */
+body.ordering-process #cart-wrapper aside.sidebar.sidebar-left {
+  display: none !important;
+}
+
+/* -------------------------------------------------------------
+   2) Layout na plnou šířku
+   ------------------------------------------------------------- */
+body.ordering-process .content-wrapper-in { display: block !important; }
+body.ordering-process main#content,
+body.ordering-process main#content.narrow {
+  width: 100% !important;
+  max-width: none !important;
+  float: none !important;
+  padding: 0 !important;
+}
+body.ordering-process .row.cart-row { display: block !important; }
+body.ordering-process .row.cart-row > [class*="col-"] {
+  width: 100% !important;
+  float: none !important;
+  padding: 0 !important;
+}
+
+/* -------------------------------------------------------------
+   3) HERO (breadcrumb + nadpis)
+   ------------------------------------------------------------- */
+.bt-scope-cart .cart-hero { padding: 24px 0 0; }
+.bt-scope-cart .breadcrumb {
+  display: flex; align-items: center; gap: 8px;
+  font-size: 13px; color: #6B6F75;
+}
+.bt-scope-cart .breadcrumb a { color: #6B6F75; text-decoration: none; }
+.bt-scope-cart .breadcrumb a:hover { color: var(--bt-black); }
+.bt-scope-cart .breadcrumb .sep { opacity: 0.5; }
+.bt-scope-cart .breadcrumb .current { color: var(--bt-black); font-weight: 600; }
+.bt-scope-cart h1 {
+  font-size: 48px;
+  letter-spacing: -0.025em;
+  margin-top: 8px;
+}
+.bt-scope-cart .cart-subtitle { color: #6B6F75; margin-top: 8px; }
+
+/* -------------------------------------------------------------
+   4) KROKY OBJEDNÁVKY
+   ------------------------------------------------------------- */
+.bt-scope-cart .cart-steps { display: flex; gap: 8px; margin: 32px 0; list-style: none; padding: 0; }
+.bt-scope-cart .cart-steps li {
+  display: flex; align-items: center; gap: 10px; flex: 1;
+  position: relative; font-size: 13px; color: #8B8F95;
+}
+.bt-scope-cart .cart-steps li .num {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--bt-paper); border: 1px solid var(--bt-line);
+  font-weight: 700; display: inline-flex; align-items: center; justify-content: center;
+  font-size: 12px; color: #8B8F95; flex-shrink: 0;
+}
+.bt-scope-cart .cart-steps li.active { color: var(--bt-black); font-weight: 600; }
+.bt-scope-cart .cart-steps li.active .num { background: var(--bt-black); color: var(--bt-pea); border-color: var(--bt-black); }
+.bt-scope-cart .cart-steps li::after {
+  content: ""; position: absolute; left: 36px; right: 12px; top: 14px;
+  height: 1px; background: var(--bt-line); z-index: -1;
+}
+.bt-scope-cart .cart-steps li:last-child::after { display: none; }
+
+/* -------------------------------------------------------------
+   5) LAYOUT: položky + souhrn
+   ------------------------------------------------------------- */
+.bt-scope-cart .cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 380px;
+  gap: 40px;
+  padding-bottom: 80px;
+}
+@media (max-width: 900px) {
+  .bt-scope-cart .cart-layout { grid-template-columns: 1fr; }
+  .bt-scope-cart .cart-summary { position: static !important; }
+}
+
+/* -------------------------------------------------------------
+   6) TABULKA POLOŽEK
+   ------------------------------------------------------------- */
+.bt-scope-cart .cart-table-card {
+  background: var(--bt-white);
+  border: 1px solid var(--bt-line);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+.bt-scope-cart .cart-row {
+  display: grid;
+  grid-template-columns: 120px 1fr auto auto auto;
+  gap: 20px;
+  padding: 20px 24px;
+  align-items: center;
+  border-bottom: 1px solid var(--bt-line);
+}
+.bt-scope-cart .cart-row:last-child { border-bottom: 0; }
+@media (max-width: 640px) {
+  .bt-scope-cart .cart-row { grid-template-columns: 80px 1fr auto; gap: 12px; padding: 16px; }
+  .bt-scope-cart .cart-row .ci-qty, .bt-scope-cart .cart-row .ci-price { grid-column: 2 / 4; }
+}
+.bt-scope-cart .ci-image {
+  width: 120px; height: 90px;
+  border-radius: var(--radius-md);
+  background: var(--bt-paper-warm);
+  display: flex; align-items: center; justify-content: center;
+  overflow: hidden; flex-shrink: 0;
+}
+.bt-scope-cart .ci-image img { max-width: 88%; max-height: 85%; object-fit: contain; }
+.bt-scope-cart .ci-info h4 { font-size: 16px; font-weight: 700; margin: 0 0 4px; letter-spacing: -0.005em; }
+.bt-scope-cart .ci-info h4 a { color: inherit; text-decoration: none; }
+.bt-scope-cart .ci-info h4 a:hover { text-decoration: underline; }
+.bt-scope-cart .ci-meta { font-size: 12px; color: #6B6F75; display: flex; gap: 10px; flex-wrap: wrap; }
+.bt-scope-cart .ci-meta .sep { opacity: 0.4; }
+.bt-scope-cart .ci-meta .is-ok { color: var(--bt-pea-deep); font-weight: 600; }
+.bt-scope-cart .ci-meta .is-out { color: #C4453A; font-weight: 600; }
+.bt-scope-cart .ci-price { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; white-space: nowrap; }
+.bt-scope-cart .ci-price small { display: block; font-size: 11px; color: #8B8F95; font-weight: 500; }
+
+/* qty-stepper — restyl nativního .quantity (form zůstává funkční, jen se přesouvá) */
+.bt-scope-cart .ci-qty .quantity {
+  display: inline-flex !important; align-items: center;
+  border: 1.5px solid var(--bt-line); border-radius: 100px; background: var(--bt-white);
+  overflow: hidden; height: 44px; position: static !important; width: auto !important;
+}
+.bt-scope-cart .ci-qty .quantity .decrease,
+.bt-scope-cart .ci-qty .quantity .increase {
+  border: 0; background: transparent; width: 38px; height: 100%;
+  display: inline-flex !important; align-items: center; justify-content: center;
+  cursor: pointer; color: var(--bt-black);
+  position: static !important; margin: 0 !important; padding: 0 !important;
+}
+/* stejná past jako u detailu produktu: ikonový font přes ::before, text schovaný */
+.bt-scope-cart .ci-qty .quantity .decrease::before,
+.bt-scope-cart .ci-qty .quantity .increase::before { content: none !important; }
+.bt-scope-cart .ci-qty .quantity .decrease__sign,
+.bt-scope-cart .ci-qty .quantity .increase__sign { display: none !important; }
+.bt-scope-cart .ci-qty .quantity .decrease svg.bt-plus-icon,
+.bt-scope-cart .ci-qty .quantity .increase svg.bt-plus-icon { display: block; pointer-events: none; }
+.bt-scope-cart .ci-qty .quantity .decrease:hover,
+.bt-scope-cart .ci-qty .quantity .increase:hover { color: var(--bt-pea-deep); }
+.bt-scope-cart .ci-qty .quantity label { margin: 0; height: 100%; display: flex; }
+.bt-scope-cart .ci-qty .quantity input.amount {
+  width: 34px !important; border: 0 !important; text-align: center;
+  font-family: inherit; font-weight: 700; font-size: 15px; background: transparent; height: 100%;
+  padding: 0 !important; margin: 0 !important;
+}
+.bt-scope-cart .ci-qty .quantity input.amount:focus { outline: none; }
+.bt-scope-cart .ci-qty .increase-tooltip,
+.bt-scope-cart .ci-qty .decrease-tooltip { display: none !important; }
+
+/* remove — restyl nativního formuláře do kulatého X */
+.bt-scope-cart .ci-remove-slot form.inline { margin: 0; }
+.bt-scope-cart .ci-remove-slot .remove-item {
+  border: 0 !important; background: transparent !important;
+  color: #8B8F95 !important; cursor: pointer;
+  width: 36px !important; height: 36px !important; border-radius: 50%;
+  display: inline-flex !important; align-items: center; justify-content: center;
+  padding: 0 !important; opacity: 1 !important;
+}
+.bt-scope-cart .ci-remove-slot .remove-item::before { content: none !important; }
+.bt-scope-cart .ci-remove-slot .remove-item:hover { background: var(--bt-paper); color: var(--bt-black) !important; }
+.bt-scope-cart .ci-remove-slot .remove-item svg { display: block; pointer-events: none; }
+
+/* -------------------------------------------------------------
+   7) DÁRKY A DOPRAVA ZDARMA
+   ------------------------------------------------------------- */
+.bt-scope-cart .cart-extras { margin-top: 16px; display: flex; flex-direction: column; gap: 12px; }
+.bt-scope-cart .free-gift-box {
+  background: linear-gradient(135deg, var(--bt-paper) 0%, var(--bt-white) 100%);
+  border: 1.5px dashed var(--bt-pea-deep);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.bt-scope-cart .free-gift-box .star {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--bt-pea); color: var(--bt-black);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0;
+}
+.bt-scope-cart .free-gift-box .txt { flex: 1; }
+.bt-scope-cart .free-gift-box .txt strong { font-size: 14px; display: block; }
+.bt-scope-cart .free-gift-box .txt span { font-size: 13px; color: #6B6F75; margin-top: 2px; display: block; }
+.bt-scope-cart .free-gift-box .check { color: var(--bt-pea-deep); flex-shrink: 0; }
+.bt-scope-cart .free-ship-box {
+  background: var(--bt-paper); border-radius: 14px; padding: 16px 20px;
+  display: flex; align-items: center; gap: 10px; font-size: 13px; color: var(--bt-pea-deep); font-weight: 700;
+}
+
+/* -------------------------------------------------------------
+   8) SOUVISEJÍCÍ / DOPLŇKY
+   ------------------------------------------------------------- */
+.bt-scope-cart .cart-related { margin-top: 56px; }
+.bt-scope-cart .cart-related .section-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
+.bt-scope-cart .cart-related h3 { font-size: 24px; margin-top: 8px; }
+.bt-scope-cart .cart-related .products { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+@media (max-width: 640px) { .bt-scope-cart .cart-related .products { grid-template-columns: 1fr; } }
+
+/* -------------------------------------------------------------
+   9) SOUHRN OBJEDNÁVKY (pravý sloupec)
+   ------------------------------------------------------------- */
+.bt-scope-cart .cart-summary {
+  position: sticky; top: 124px;
+  background: var(--bt-white); border: 1px solid var(--bt-line);
+  border-radius: var(--radius-lg); padding: 24px; align-self: start;
+}
+.bt-scope-cart .cart-summary h3 { font-size: 20px; margin-bottom: 20px; }
+.bt-scope-cart .ship-progress { padding: 0 0 16px; }
+.bt-scope-cart .ship-progress .ship-text { font-size: 12px; color: #6B6F75; }
+.bt-scope-cart .ship-progress .ship-text strong { color: var(--bt-black); }
+.bt-scope-cart .ship-progress .bar { height: 6px; background: var(--bt-paper); border-radius: 100px; overflow: hidden; margin: 8px 0; }
+.bt-scope-cart .ship-progress .bar > div { height: 100%; background: var(--bt-pea); border-radius: 100px; }
+.bt-scope-cart .summary-row { display: flex; justify-content: space-between; padding: 8px 0; font-size: 14px; color: var(--bt-anthracite); }
+.bt-scope-cart .summary-row.total {
+  border-top: 1px solid var(--bt-line); margin-top: 12px; padding-top: 16px;
+  font-size: 22px; font-weight: 800; color: var(--bt-black); letter-spacing: -0.01em;
+}
+.bt-scope-cart .vat-note { font-size: 11px; color: #8B8F95; text-align: right; }
+.bt-scope-cart .promo-row { display: flex; gap: 8px; margin: 16px 0; }
+.bt-scope-cart .promo-row input {
+  flex: 1; border: 1px solid var(--bt-line); background: var(--bt-paper);
+  padding: 12px 14px; border-radius: 100px; font-family: inherit; font-size: 13px; outline: none;
+}
+.bt-scope-cart .promo-row input:focus { border-color: var(--bt-black); background: var(--bt-white); }
+.bt-scope-cart .promo-row button { padding: 0 18px; height: 44px; }
+.bt-scope-cart .ship-shield {
+  margin: 20px 0; padding: 14px; background: var(--bt-paper); border-radius: var(--radius-md);
+  display: flex; gap: 12px; align-items: center; font-size: 12px; color: var(--bt-anthracite);
+}
+.bt-scope-cart .ship-shield .icon {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--bt-white);
+  display: inline-flex; align-items: center; justify-content: center; color: var(--bt-pea-deep); flex-shrink: 0;
+}
+.bt-scope-cart .btn-checkout { width: 100%; height: 56px; padding: 0; font-size: 15px; }
+.bt-scope-cart .btn-continue {
+  text-align: center; display: block; margin-top: 12px; font-size: 13px; color: #6B6F75; font-weight: 500; text-decoration: none;
+}
+.bt-scope-cart .btn-continue:hover { color: var(--bt-black); }
+.bt-scope-cart .pay-badges { display: flex; justify-content: center; gap: 8px; margin-top: 20px; flex-wrap: wrap; }
+.bt-scope-cart .pay-badges span {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.06em; color: #8B8F95;
+  padding: 4px 8px; border: 1px solid var(--bt-line); border-radius: 4px;
+}
+
+/* -------------------------------------------------------------
+   10) PRÁZDNÝ KOŠÍK
+   ------------------------------------------------------------- */
+.bt-scope-cart .cart-empty { padding: 60px 0; text-align: center; color: #6B6F75; }
+.bt-scope-cart .cart-empty a.btn { margin-top: 16px; }
