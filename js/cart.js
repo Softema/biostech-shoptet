@@ -9,6 +9,12 @@
   'use strict';
 
   if (!document.body.classList.contains('ordering-process')) { if (window.__btDone) window.__btDone(); return; }
+  // odlišujeme skutečnou stránku košíku od dalších kroků objednávky
+  // (Doprava a platba, Údaje…), které mají jinou strukturu a nesmíme
+  // je zasáhnout stránkovými CSS pravidly cílenými jen na košík
+  if (document.getElementById('cart-wrapper')) {
+    document.documentElement.classList.add('bt-on-cart');
+  }
 
   var VAT = 1.21;
   var PLUS_SVG = '<svg class="bt-plus-icon" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg>';
@@ -39,6 +45,28 @@
     if (!el) return;
     el.querySelectorAll('svg:not(.bt-plus-icon), i, .icon').forEach(function (n) { n.remove(); });
     if (!el.querySelector('svg.bt-plus-icon')) el.insertAdjacentHTML('beforeend', svg);
+  }
+
+  /* Přesunutím formuláře mimo #cart-wrapper přestane fungovat nativní
+     posluchač na +/- (byl navázaný jen na původní kontejner) — hodnota
+     v poli se sice změní, ale nic se neodešle na server (ověřeno: žádný
+     network request). Proto formulář po každé změně množství odešleme
+     sami a čerstvý obsah košíku znovu natáhneme — MutationObserver
+     na to už zareaguje a přestaví ceny sám. */
+  function submitQtyForm(form) {
+    try {
+      var data = new FormData(form);
+      fetch(form.action, { method: 'POST', body: data, credentials: 'same-origin' })
+        .then(function () { return fetch(location.href, { credentials: 'same-origin' }); })
+        .then(function (r) { return r.text(); })
+        .then(function (html) {
+          var doc = new DOMParser().parseFromString(html, 'text/html');
+          var freshWrapper = doc.getElementById('cart-wrapper');
+          var liveWrapper = document.getElementById('cart-wrapper');
+          if (freshWrapper && liveWrapper) liveWrapper.innerHTML = freshWrapper.innerHTML;
+        })
+        .catch(function () { form.submit(); }); // AJAX selhal — spolehlivá záloha: normální odeslání
+    } catch (e) { form.submit(); }
   }
 
   /* -----------------------------------------------------------
@@ -93,8 +121,16 @@
     if (qtyForm) {
       var qtySlot = card.querySelector('.bt-slot-qty');
       qtySlot.parentNode.replaceChild(qtyForm, qtySlot);
-      ensureIcon(qtyForm.querySelector('.increase'), PLUS_SVG);
-      ensureIcon(qtyForm.querySelector('.decrease'), MINUS_SVG);
+      var incBtn = qtyForm.querySelector('.increase');
+      var decBtn = qtyForm.querySelector('.decrease');
+      var amountInput = qtyForm.querySelector('input.amount');
+      ensureIcon(incBtn, PLUS_SVG);
+      ensureIcon(decBtn, MINUS_SVG);
+      // setTimeout(0): necháme nativní (pokud existuje) přičtení/odečtení
+      // hodnoty v poli doběhnout dřív, než formulář odešleme
+      if (incBtn) incBtn.addEventListener('click', function () { setTimeout(function () { submitQtyForm(qtyForm); }, 0); });
+      if (decBtn) decBtn.addEventListener('click', function () { setTimeout(function () { submitQtyForm(qtyForm); }, 0); });
+      if (amountInput) amountInput.addEventListener('change', function () { submitQtyForm(qtyForm); });
     }
     if (removeForm) {
       var removeSlot = card.querySelector('.bt-slot-remove');
