@@ -450,3 +450,35 @@
   padding: 0 32px;
   box-sizing: border-box;
 }
+
+/* -------------------------------------------------------------
+   Počet položek v košíku — číslo patří DO zeleného kolečka
+   (nativně je to <i data-testid="headerCartCount">1</i>, prostý
+   inline text bez vlastního stylu — proto padalo nad cenu).
+   position:static přebíjí jakoukoliv nativní absolutní pozici,
+   která by ho jinak vytrhla z běžného řádkového toku vedle ceny.
+   ------------------------------------------------------------- */
+#header .navigation-buttons a.cart-count i[data-testid="headerCartCount"] {
+  position: static !important;
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin: 0 !important;
+  padding: 0 !important;
+  border-radius: 50%;
+  background: var(--bt-pea);
+  color: var(--bt-black);
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+  flex-shrink: 0;
+  transform: none !important;
+  top: auto !important;
+  left: auto !important;
+  right: auto !important;
+}
+/* na prázdný košík (bez čísla) zelené kolečko nezobrazujeme */
+#header .navigation-buttons a.cart-count i[data-testid="headerCartCount"]:empty { display: none !important; }
