@@ -275,3 +275,26 @@ html.bt-on-cart body.ordering-process .row.cart-row > [class*="col-"] {
   border: 1px solid var(--bt-line); border-radius: 100px; padding: 8px 16px; text-decoration: none;
 }
 .bt-scope-cart .cart-empty-links a:hover { border-color: var(--bt-black); background: var(--bt-paper); }
+
+/* -------------------------------------------------------------
+   11) CHECKOUT SIDEBAR (další kroky objednávky — Doprava a platba…)
+   Element #checkoutSidebar existuje jen na TĚCHTO krocích (ne na
+   /kosik/, tam je vlastní #bt-cart-root) — bezpečné cílit rovnou
+   podle ID, žádné riziko křížení s jinými stránkami.
+   Nativně je jen position:relative + JS si dopočítává `top` inline
+   stylem (snaha o "sticky do paty stránky") — proto !important,
+   ať naše hodnota vyhraje nad tím, co tam Shoptet skript napíše.
+   ------------------------------------------------------------- */
+@media (min-width: 768px) {
+  body.ordering-process #checkoutSidebar {
+    position: sticky !important;
+    top: 20px !important;
+    align-self: flex-start;
+    transition: none !important;
+  }
+}
+@media (max-width: 767px) {
+  body.ordering-process #checkoutSidebar {
+    position: static !important;
+  }
+}
