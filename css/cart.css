@@ -18,17 +18,22 @@ body.ordering-process #cart-wrapper aside.sidebar.sidebar-left {
 
 /* -------------------------------------------------------------
    2) Layout na plnou šířku
+   POZOR: scope na html.bt-on-cart (JS třída, viz cart.js), NE na
+   body.ordering-process — to platí pro CELÝ objednávkový proces
+   (i krok "Doprava a platba"), a .row.cart-row se stejným názvem
+   tam používá nativní Shoptet pro svůj vlastní dvousloupcový layout
+   (col-md-8/col-md-4) — force display:block ho tam rozbil.
    ------------------------------------------------------------- */
-body.ordering-process .content-wrapper-in { display: block !important; }
-body.ordering-process main#content,
-body.ordering-process main#content.narrow {
+html.bt-on-cart body.ordering-process .content-wrapper-in { display: block !important; }
+html.bt-on-cart body.ordering-process main#content,
+html.bt-on-cart body.ordering-process main#content.narrow {
   width: 100% !important;
   max-width: none !important;
   float: none !important;
   padding: 0 !important;
 }
-body.ordering-process .row.cart-row { display: block !important; }
-body.ordering-process .row.cart-row > [class*="col-"] {
+html.bt-on-cart body.ordering-process .row.cart-row { display: block !important; }
+html.bt-on-cart body.ordering-process .row.cart-row > [class*="col-"] {
   width: 100% !important;
   float: none !important;
   padding: 0 !important;
