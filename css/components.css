@@ -1281,7 +1281,26 @@
 }
 .bt-scope .line-card.line-ace .line-num { color: var(--bt-orange, #f47b20); }
 
-/* Štítek (Doporučujeme apod.) nesmí přetékat bublinu */
+/* Štítky na kartách — dvě různé příčiny useknutého textu, obě řešené tady:
+   1) Dřívější `white-space: nowrap` držel dlouhé popisky ("Vlajková loď",
+      "Na objednávku", "Testovací jízda") na jednom řádku, bublina se tím
+      roztáhla přes okraj karty a .product-image{overflow:hidden} ji uřízl.
+      → povolíme zalomení a omezíme šířku, ať se vejde vždy.
+   2) Štítky jsou absolutně pozicované BEZ z-indexu, ale překryvný odkaz
+      obrázku (<a style="position:absolute;inset:0">) je v DOMu až za nimi,
+      takže se vykresloval nad nimi a schoval je za fotku (bylo vidět jen
+      to, co přesahovalo vlevo od obrázku).
+      → štítky dostanou z-index nad překryv. */
+.bt-scope .product-card .product-image > a { z-index: 1; }
+.bt-scope .product-card .product-line,
+.bt-scope .product-card .product-flags {
+  z-index: 2;
+  max-width: calc(55% - 14px);
+}
+.bt-scope .product-card .product-line,
 .bt-scope .product-card .flag {
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.25;
+  text-align: center;
 }
