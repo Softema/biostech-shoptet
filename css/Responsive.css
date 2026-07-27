@@ -1,0 +1,234 @@
+/* =============================================================
+   BIOS TECH — responsive.css
+   Kompletní mobilní průchod. Načítá se JAKO POSLEDNÍ, aby přebil
+   desktopová pravidla z ostatních souborů (header.css a style.css
+   žádné media queries nemají — proto se na mobilu rozpadaly).
+   ============================================================= */
+
+/* -------------------------------------------------------------
+   0) Globální pojistka proti vodorovnému přetékání
+   Prototypové sekce mají inline šířky/pozice z desktopu; na mobilu
+   pak stránka ujíždí do strany a nejde pořádně scrollovat.
+   ------------------------------------------------------------- */
+@media (max-width: 991px) {
+  html, body { max-width: 100%; overflow-x: hidden; }
+  #bt-homepage img, #bt-homepage svg { max-width: 100%; }
+}
+
+/* =============================================================
+   1) HLAVIČKA A MOBILNÍ MENU
+   Nejdůležitější část — kvůli tomuhle se nešlo proklikat do košíku.
+   Naše desktopové pravidlo `#navigation .menu-level-1 { display:flex }`
+   platilo i pro mobilní vysouvací nabídku, takže se položky skládaly
+   vedle sebe, nevešly se a Shoptet většinu schoval do helperu "Více"
+   (ta osamocená šipka v nabídce).
+   ============================================================= */
+@media (max-width: 991px) {
+  /* menu = svislý seznam přes celou šířku */
+  #navigation .menu-level-1,
+  #navigation .navigation-in.menu {
+    display: block !important;
+    max-width: none !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+  #navigation .menu-level-1 > li {
+    display: block !important;
+    width: 100% !important;
+    float: none !important;
+    border-bottom: 1px solid var(--bt-line) !important;
+  }
+  #navigation .menu-level-1 > li > a {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    width: 100% !important;
+    padding: 16px 20px !important;
+    font-size: 16px !important;
+    text-align: left !important;
+    white-space: normal !important;
+  }
+  /* desktopové podtržítko pod položkou na mobilu nedává smysl */
+  #navigation .menu-level-1 > li > a::after { display: none !important; }
+
+  /* helper "Více" (šipka) — na mobilu nepotřebujeme, všechno se vejde */
+  #navigation .menu-helper,
+  .menu-helper[data-testid="hamburgerMenu"] { display: none !important; }
+  /* položky, které Shoptet stihl označit jako "nevejde se", vrátíme zpět */
+  #navigation .menu-level-1 > li.cropped { display: block !important; }
+
+  /* podmenu (Malotraktory → Nové malotraktory) rozbalené pod položkou */
+  #navigation .menu-level-2 {
+    position: static !important;
+    display: none;
+    width: 100% !important;
+    box-shadow: none !important;
+    border: 0 !important;
+    padding: 0 0 8px !important;
+    background: var(--bt-paper) !important;
+  }
+  #navigation .menu-level-1 > li.expanded > .menu-level-2,
+  #navigation .menu-level-1 > li:hover > .menu-level-2 { display: block !important; }
+  #navigation .menu-level-2 > li > a {
+    padding: 12px 20px 12px 32px !important;
+    font-size: 15px !important;
+  }
+  #navigation .menu-level-2 .menu-image img { display: none !important; }
+
+  #navigation { padding-bottom: 0 !important; }
+  #navigation .nav-divider, #navigation .nav-extra { display: none !important; }
+
+  /* zavírací křížek nabídky ať je na spolehlivém místě a dobře se trefí */
+  #navigation .navigation-close {
+    position: absolute !important;
+    top: 10px; right: 14px;
+    width: 44px; height: 44px;
+    z-index: 5;
+  }
+
+  /* horní lišta a vyhledávání */
+  #header .search { width: 100% !important; }
+  #header .search-whisperer { left: 0 !important; right: 0 !important; width: auto !important; }
+  #header .navigation-buttons a.cart-count { height: 40px; padding: 0 12px !important; }
+  #header .navigation-buttons a.cart-count .cart-price { font-size: 12px; }
+}
+
+/* =============================================================
+   2) HOMEPAGE
+   Prototypové sekce mají inline styly z desktopu (grid-template-columns,
+   font-size 64px…). Inline styl přebije externí CSS, proto !important.
+   ============================================================= */
+@media (max-width: 767px) {
+  /* všechny prototypové mřížky do jednoho sloupce */
+  #bt-homepage [style*="grid-template-columns"] {
+    grid-template-columns: 1fr !important;
+  }
+  /* typografie — velké nadpisy se na mobil nevejdou */
+  #bt-homepage h1 { font-size: clamp(30px, 8.5vw, 44px) !important; line-height: 1.05 !important; }
+  #bt-homepage h2 { font-size: clamp(26px, 7.5vw, 38px) !important; line-height: 1.08 !important; }
+  #bt-homepage h3 { font-size: clamp(19px, 5vw, 24px) !important; line-height: 1.2 !important; }
+  #bt-homepage p  { font-size: 15px !important; }
+  /* dlouhá slova ("Profesionální", "Vyzkoušejte") nesmí přetéct */
+  #bt-homepage h1, #bt-homepage h2, #bt-homepage h3 { overflow-wrap: break-word; hyphens: auto; }
+
+  /* sekce: zmírnit svislé odsazení a zrušit pevné šířky */
+  #bt-homepage section { padding-left: 0 !important; padding-right: 0 !important; }
+  #bt-homepage section > .container,
+  #bt-homepage .container { padding-left: 18px !important; padding-right: 18px !important; }
+  #bt-homepage [style*="max-width"] { max-width: 100% !important; }
+
+  /* absolutně pozicované ozdobné kartičky (ACE V3000 popisek nad fotkou,
+     adresa u showroomu) na mobilu do normálního toku, ať nic nepřekrývají */
+  #bt-homepage .bt-ace-hero [style*="position: absolute"],
+  #bt-homepage [style*="position: absolute"][style*="right"] {
+    position: static !important;
+    text-align: left !important;
+    margin-top: 12px;
+  }
+  #bt-homepage .bt-ace-hero { min-height: 0 !important; padding: 24px !important; display: block !important; }
+  #bt-homepage .bt-ace-hero > div[style*="height"] { height: auto !important; }
+  #bt-homepage .bt-ace-hero img { height: auto !important; max-height: 220px; }
+}
+
+/* tlačítka s ikonou — text se lámal a ikona zůstávala vlevo o samotě */
+@media (max-width: 767px) {
+  .bt-scope .btn, .bt-scope a.btn, .bt-scope button.btn,
+  .bt-scope-detail .btn, .bt-scope-cart .btn {
+    width: 100%;
+    padding: 14px 18px !important;
+    font-size: 13px !important;
+    text-align: center;
+    white-space: normal;
+    line-height: 1.25;
+  }
+  .bt-scope .btn svg, .bt-scope-detail .btn svg, .bt-scope-cart .btn svg { flex-shrink: 0; }
+  /* skupiny tlačítek pod sebe */
+  #bt-homepage [style*="display: flex"][style*="gap"] { flex-wrap: wrap !important; }
+}
+
+/* =============================================================
+   3) KARTY PRODUKTŮ
+   ============================================================= */
+@media (max-width: 767px) {
+  .bt-scope .products,
+  .bt-scope .bt-top-products,
+  .bt-scope .bt-ace-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  .bt-scope .product-card .product-line,
+  .bt-scope .product-card .product-flags { max-width: calc(60% - 10px); }
+  .bt-scope .product-card .product-name { font-size: 17px !important; }
+}
+
+/* =============================================================
+   4) KOŠÍK A OBJEDNÁVKA
+   ============================================================= */
+@media (max-width: 767px) {
+  .bt-scope-cart .cart-layout { grid-template-columns: 1fr !important; }
+  .bt-scope-cart h1 { font-size: clamp(28px, 8vw, 40px) !important; }
+
+  /* řádek položky: obrázek + info nahoře, množství/cena/smazat pod tím */
+  .bt-scope-cart .cart-row {
+    grid-template-columns: 72px 1fr auto !important;
+    grid-template-areas:
+      "img info remove"
+      "qty qty price" !important;
+    row-gap: 12px !important;
+    padding: 14px !important;
+  }
+  .bt-scope-cart .cart-row .ci-image { grid-area: img; width: 72px; height: 60px; }
+  .bt-scope-cart .cart-row .ci-info { grid-area: info; }
+  .bt-scope-cart .cart-row .ci-qty { grid-area: qty; }
+  .bt-scope-cart .cart-row .ci-price { grid-area: price; text-align: right; }
+  .bt-scope-cart .cart-row .ci-remove-slot { grid-area: remove; }
+  .bt-scope-cart .ci-info h4 { font-size: 15px !important; }
+
+  /* kroky objednávky — na mobilu jen aktivní krok, ať nepřetékají */
+  .bt-scope-cart .cart-steps { gap: 4px; }
+  .bt-scope-cart .cart-steps li { font-size: 11px; }
+  .bt-scope-cart .cart-steps li::after { display: none; }
+
+  .bt-scope-cart .cart-summary { position: static !important; padding: 18px !important; }
+  .bt-scope-cart .free-gift-box { flex-wrap: wrap; }
+  .bt-scope-cart .cart-related .products { grid-template-columns: 1fr !important; }
+}
+
+/* další kroky objednávky (Doprava a platba…) — nativní Shoptet */
+@media (max-width: 767px) {
+  body.ordering-process #checkoutSidebar { position: static !important; }
+  body.ordering-process .row.cart-row > [class*="col-"] { width: 100% !important; float: none !important; }
+}
+
+/* =============================================================
+   5) DETAIL PRODUKTU — doladění (základ už v detail.css)
+   ============================================================= */
+@media (max-width: 767px) {
+  .bt-scope-detail .p-info h1 { font-size: clamp(26px, 7.5vw, 36px) !important; }
+  .bt-scope-detail .p-price-block { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .bt-scope-detail .p-cta-row { flex-wrap: wrap; }
+  .bt-scope-detail .p-cta-row .add-to-cart-button { flex: 1 1 100%; order: 3; }
+  .bt-scope-detail .bt-tabs { gap: 16px; overflow-x: auto; flex-wrap: nowrap; }
+  .bt-scope-detail .bt-tab-link { white-space: nowrap; font-size: 13px; }
+}
+
+/* =============================================================
+   6) KATEGORIE — doladění
+   ============================================================= */
+@media (max-width: 767px) {
+  .bt-scope .cat-hero h1 { font-size: clamp(30px, 8.5vw, 44px) !important; }
+  .bt-scope .category-toolbar { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .bt-scope .toolbar-right { width: 100%; justify-content: space-between; }
+}
+
+/* =============================================================
+   7) PATIČKA
+   ============================================================= */
+@media (max-width: 767px) {
+  #footer .bt-scope [style*="grid-template-columns"],
+  .bt-scope .site-footer [style*="grid-template-columns"] {
+    grid-template-columns: 1fr 1fr !important;
+    gap: 24px !important;
+  }
+}
