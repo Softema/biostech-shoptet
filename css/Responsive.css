@@ -18,28 +18,36 @@
 /* =============================================================
    1) HLAVIČKA A MOBILNÍ MENU
    Nejdůležitější část — kvůli tomuhle se nešlo proklikat do košíku.
-   Naše desktopové pravidlo `#navigation .menu-level-1 { display:flex }`
-   platilo i pro mobilní vysouvací nabídku, takže se položky skládaly
-   vedle sebe, nevešly se a Shoptet většinu schoval do helperu "Více"
-   (ta osamocená šipka v nabídce).
+
+   DVĚ chyby, obě opravené:
+   a) header.css mělo z dřívější fáze pravidlo na #navigation BEZ
+      media query (šlo o desktopovou opravu mezery pod menu) —
+      to force-ovalo width:100%/overflow:visible na VŠECH šířkách,
+      takže nativní mobilní zásuvka (width:0 + overflow:hidden, dokud
+      ji hamburger neotevře třídou .navigation-window-visible na
+      <body>) byla permanentně "odemčená" a menu viselo natvrdo
+      v obsahu stránky. Opraveno v header.css (přidána media query).
+   b) tahle naše stylizace seznamu (svislé položky přes celou šířku)
+      musí platit JEN když je menu skutečně otevřené — proto vše
+      scoped pod `.navigation-window-visible`, ne natvrdo.
    ============================================================= */
 @media (max-width: 991px) {
-  /* menu = svislý seznam přes celou šířku */
-  #navigation .menu-level-1,
-  #navigation .navigation-in.menu {
+  /* menu = svislý seznam přes celou šířku, ALE jen když je otevřené */
+  .navigation-window-visible #navigation .menu-level-1,
+  .navigation-window-visible #navigation .navigation-in.menu {
     display: block !important;
     max-width: none !important;
     width: 100% !important;
     padding: 0 !important;
     margin: 0 !important;
   }
-  #navigation .menu-level-1 > li {
+  .navigation-window-visible #navigation .menu-level-1 > li {
     display: block !important;
     width: 100% !important;
     float: none !important;
     border-bottom: 1px solid var(--bt-line) !important;
   }
-  #navigation .menu-level-1 > li > a {
+  .navigation-window-visible #navigation .menu-level-1 > li > a {
     display: flex !important;
     align-items: center;
     justify-content: space-between;
@@ -50,16 +58,15 @@
     white-space: normal !important;
   }
   /* desktopové podtržítko pod položkou na mobilu nedává smysl */
-  #navigation .menu-level-1 > li > a::after { display: none !important; }
+  .navigation-window-visible #navigation .menu-level-1 > li > a::after { display: none !important; }
 
   /* helper "Více" (šipka) — na mobilu nepotřebujeme, všechno se vejde */
-  #navigation .menu-helper,
-  .menu-helper[data-testid="hamburgerMenu"] { display: none !important; }
+  .navigation-window-visible #navigation .menu-helper { display: none !important; }
   /* položky, které Shoptet stihl označit jako "nevejde se", vrátíme zpět */
-  #navigation .menu-level-1 > li.cropped { display: block !important; }
+  .navigation-window-visible #navigation .menu-level-1 > li.cropped { display: block !important; }
 
   /* podmenu (Malotraktory → Nové malotraktory) rozbalené pod položkou */
-  #navigation .menu-level-2 {
+  .navigation-window-visible #navigation .menu-level-2 {
     position: static !important;
     display: none;
     width: 100% !important;
@@ -68,26 +75,27 @@
     padding: 0 0 8px !important;
     background: var(--bt-paper) !important;
   }
-  #navigation .menu-level-1 > li.expanded > .menu-level-2,
-  #navigation .menu-level-1 > li:hover > .menu-level-2 { display: block !important; }
-  #navigation .menu-level-2 > li > a {
+  .navigation-window-visible #navigation .menu-level-1 > li.expanded > .menu-level-2,
+  .navigation-window-visible #navigation .menu-level-1 > li:hover > .menu-level-2 { display: block !important; }
+  .navigation-window-visible #navigation .menu-level-2 > li > a {
     padding: 12px 20px 12px 32px !important;
     font-size: 15px !important;
   }
-  #navigation .menu-level-2 .menu-image img { display: none !important; }
+  .navigation-window-visible #navigation .menu-level-2 .menu-image img { display: none !important; }
 
-  #navigation { padding-bottom: 0 !important; }
-  #navigation .nav-divider, #navigation .nav-extra { display: none !important; }
+  .navigation-window-visible #navigation { padding-bottom: 0 !important; }
+  .navigation-window-visible #navigation .nav-divider,
+  .navigation-window-visible #navigation .nav-extra { display: none !important; }
 
   /* zavírací křížek nabídky ať je na spolehlivém místě a dobře se trefí */
-  #navigation .navigation-close {
+  .navigation-window-visible #navigation .navigation-close {
     position: absolute !important;
     top: 10px; right: 14px;
     width: 44px; height: 44px;
     z-index: 5;
   }
 
-  /* horní lišta a vyhledávání */
+  /* horní lišta a vyhledávání — tohle platí bez ohledu na stav menu */
   #header .search { width: 100% !important; }
   #header .search-whisperer { left: 0 !important; right: 0 !important; width: auto !important; }
   #header .navigation-buttons a.cart-count { height: 40px; padding: 0 12px !important; }
