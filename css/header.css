@@ -428,27 +428,33 @@
 }
 
 /* (3) mezera pod menu - #navigation ma na desktopu natvrdo
-   height:32px v sablone, nase padding se tak "schovalo" */
-#navigation {
-  height: auto !important;
-  overflow: visible !important;
-  width: 100% !important;
-  max-width: 100% !important;
-  position: relative !important;
-  left: auto !important;
-  right: auto !important;
-  margin-left: 0 !important;
-  margin-right: 0 !important;
-  min-height: 56px;
-}
-#navigation .navigation-in.menu {
-  left: 0;
-  right: 0;
-  width: auto;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 32px;
-  box-sizing: border-box;
+   height:32px v sablone, nase padding se tak "schovalo".
+   POZOR: jen pro desktop — na mobilu je #navigation nativně
+   schovaná zásuvka (width:0 + overflow:hidden, dokud ji hamburger
+   neotevře přidáním .navigation-window-visible) a tohle pravidlo
+   by ji bez media query permanentně odemklo/zviditelnilo. */
+@media (min-width: 768px) {
+  #navigation {
+    height: auto !important;
+    overflow: visible !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    position: relative !important;
+    left: auto !important;
+    right: auto !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    min-height: 56px;
+  }
+  #navigation .navigation-in.menu {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: 1440px;
+    margin: 0 auto;
+    padding: 0 32px;
+    box-sizing: border-box;
+  }
 }
 
 /* -------------------------------------------------------------
