@@ -95,6 +95,54 @@
     z-index: 5;
   }
 
+  /* horní kontaktní pruh: telefon/e-mail + tři ikonky (hledat, přihlásit,
+     menu) v .responsive-tools. Nativně má tenhle shluk několik VZÁJEMNĚ SI
+     odporujících pravidel podle přesné šířky (na jedné je hamburger
+     position:fixed bez ohledu na okolní obsah, na jiné je ikona hledání
+     visibility:hidden) — místo dohadování se s tím bereme layout napevno
+     do vlastních rukou, ať se nikdy nepřekryje s kontaktními údaji. */
+  .top-navigation-bar .container {
+    display: flex !important;
+    flex-wrap: nowrap !important;
+    align-items: center;
+    gap: 8px;
+  }
+  .top-navigation-contacts {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+  .top-navigation-contacts .project-phone,
+  .top-navigation-contacts strong { display: none !important; } /* na mobilu stačí e-mail, ať se vejde */
+  .top-navigation-menu { display: none !important; } /* Showroom/Servis/Financování/Testovací jízda — jsou i v hlavním menu */
+  .responsive-tools {
+    display: flex !important;
+    position: static !important;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    flex: 0 0 auto;
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .responsive-tools > a {
+    position: static !important;
+    visibility: visible !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px;
+    margin: 0 !important;
+    right: auto !important;
+    top: auto !important;
+  }
+  .responsive-tools > a[data-target="login"] { display: none !important; } /* přihlášení má vlastní odkaz jinde, netřeba duplikovat */
+
   /* horní lišta a vyhledávání — tohle platí bez ohledu na stav menu */
   #header .search { width: 100% !important; }
   #header .search-whisperer { left: 0 !important; right: 0 !important; width: auto !important; }
