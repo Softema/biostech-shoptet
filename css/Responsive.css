@@ -95,6 +95,36 @@
     z-index: 5;
   }
 
+  /* první položka menu ("Malotraktory") se schovávala pod pevnou horní
+     lištou (.top-navigation-bar je position:fixed přes celou šířku) —
+     obsah zásuvky menu s ní musí počítat a začít až pod ní */
+  .navigation-window-visible #navigation .navigation-in,
+  .navigation-window-visible #navigation .menu-level-1 {
+    padding-top: 64px !important;
+  }
+
+  /* vyhledávání: nativně je #header .search display:none a zobrazí se
+     jen po kliknutí na lupu (přidá se .search-window-visible) — to jsme
+     zatím neošetřili, stejná past jako menu/.navigation-window-visible */
+  .search-window-visible #header .search {
+    display: block !important;
+    position: fixed !important;
+    top: 0; left: 0; right: 0;
+    z-index: 1001;
+    background: var(--bt-white);
+    padding: 14px 16px !important;
+    box-shadow: 0 8px 20px -8px rgba(26,26,26,0.25);
+  }
+  .search-window-visible #header .search-form { display: flex !important; gap: 8px; }
+  .search-window-visible #header .search-input {
+    flex: 1 1 auto;
+    height: 44px;
+    padding: 0 14px;
+    border: 1px solid var(--bt-line);
+    border-radius: 100px;
+    font-size: 15px;
+  }
+
   /* horní kontaktní pruh: telefon/e-mail + tři ikonky (hledat, přihlásit,
      menu) v .responsive-tools. Nativně má tenhle shluk několik VZÁJEMNĚ SI
      odporujících pravidel podle přesné šířky (na jedné je hamburger
