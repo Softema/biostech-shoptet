@@ -25,6 +25,11 @@ body.in-showroom-stoky main#content.narrow {
   float: none !important;
   padding: 0 !important;
 }
+body.in-testovaci-jizda .content-inner,
+body.in-showroom-stoky .content-inner {
+  max-width: none !important;
+  margin: 0 !important;
+}
 body.in-testovaci-jizda .content-wrapper-in,
 body.in-showroom-stoky .content-wrapper-in {
   display: block !important;
