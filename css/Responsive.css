@@ -125,6 +125,22 @@
     font-size: 15px;
   }
 
+  /* druhý řádek hlavičky (logo/vyhledávání/košík) — nativně je omezený
+     jen na desktop, na mobilu bez explicitního pravidla splihne do
+     nedefinovaného stavu. Uděláme z něj kompaktní řádek: logo + košík,
+     plné vyhledávací pole schované (řeší ho lupa v horní liště). */
+  #header .header-top {
+    display: flex !important;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 0 !important;
+  }
+  #header .site-name-wrapper { flex: 0 0 auto; }
+  #header .site-name img { max-height: 32px; width: auto; }
+  #header .search { display: none !important; }
+  #header .navigation-buttons { flex: 0 0 auto; }
+
   /* horní kontaktní pruh: telefon/e-mail + tři ikonky (hledat, přihlásit,
      menu) v .responsive-tools. Nativně má tenhle shluk několik VZÁJEMNĚ SI
      odporujících pravidel podle přesné šířky (na jedné je hamburger
