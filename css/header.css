@@ -163,68 +163,73 @@
   flex-shrink: 0;
 }
 
-/* Main nav */
-#navigation {
-  background: var(--bt-white);
-  border-top: 1px solid var(--bt-line);
+/* Main nav — POUZE DESKTOP. Na mobilu má menu vlastní (jinou) stylizaci
+   v responsive.css scoped pod .navigation-window-visible — tahle sekce
+   bez media query dřív natvrdo vynucovala vodorovný bílý flex řádek
+   i na mobilu, bez ohledu na to, jestli byla zásuvka menu otevřená. */
+@media (min-width: 992px) {
+  #navigation {
+    background: var(--bt-white);
+    border-top: 1px solid var(--bt-line);
+  }
+  #navigation .menu-level-1 {
+    display: flex;
+    align-items: center;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 4px;
+  }
+  #navigation .menu-level-1 > li > a {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 18px 18px;
+    font-size: var(--fs-14);
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    color: var(--bt-black);
+    position: relative;
+  }
+  #navigation .menu-level-1 > li > a:hover { color: var(--bt-black); }
+  #navigation .menu-level-1 > li > a::after {
+    content: "";
+    position: absolute;
+    left: 18px;
+    right: 18px;
+    bottom: 8px;
+    height: 2px;
+    background: var(--bt-pea);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform .2s;
+  }
+  #navigation .menu-level-1 > li > a:hover::after,
+  #navigation .menu-level-1 > li.is-active > a::after { transform: scaleX(1); }
+  #navigation .menu-level-1 > li > a b { font-weight: 600; }
+  #navigation .menu-level-1 .submenu-arrow {
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 4px solid currentColor;
+    margin-left: 2px;
+  }
+  #navigation .nav-divider { flex: 1; }
+  #navigation .nav-extra {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    font-size: var(--fs-13);
+    color: #5C6168;
+    padding-right: 4px;
+  }
+  #navigation .nav-extra .pea-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--bt-pea); display: inline-block; margin-right: 6px;
+  }
+  #navigation .nav-extra a:hover { color: var(--bt-black); }
 }
-#navigation .menu-level-1 {
-  display: flex;
-  align-items: center;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  gap: 4px;
-}
-#navigation .menu-level-1 > li > a {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 18px 18px;
-  font-size: var(--fs-14);
-  font-weight: 600;
-  letter-spacing: 0.01em;
-  color: var(--bt-black);
-  position: relative;
-}
-#navigation .menu-level-1 > li > a:hover { color: var(--bt-black); }
-#navigation .menu-level-1 > li > a::after {
-  content: "";
-  position: absolute;
-  left: 18px;
-  right: 18px;
-  bottom: 8px;
-  height: 2px;
-  background: var(--bt-pea);
-  transform: scaleX(0);
-  transform-origin: left center;
-  transition: transform .2s;
-}
-#navigation .menu-level-1 > li > a:hover::after,
-#navigation .menu-level-1 > li.is-active > a::after { transform: scaleX(1); }
-#navigation .menu-level-1 > li > a b { font-weight: 600; }
-#navigation .menu-level-1 .submenu-arrow {
-  width: 0;
-  height: 0;
-  border-left: 4px solid transparent;
-  border-right: 4px solid transparent;
-  border-top: 4px solid currentColor;
-  margin-left: 2px;
-}
-#navigation .nav-divider { flex: 1; }
-#navigation .nav-extra {
-  display: flex;
-  align-items: center;
-  gap: 18px;
-  font-size: var(--fs-13);
-  color: #5C6168;
-  padding-right: 4px;
-}
-#navigation .nav-extra .pea-dot {
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--bt-pea); display: inline-block; margin-right: 6px;
-}
-#navigation .nav-extra a:hover { color: var(--bt-black); }
 
 
 /* =============================================================
@@ -251,9 +256,13 @@
 
 /* =============================================================
    MENU — prave polozky (Showroom Stoky, Testovaci jizda)
+   POUZE DESKTOP — na mobilu jsou tyhle odkazy uvnitř zásuvky menu,
+   řídí je responsive.css scoped pod .navigation-window-visible.
    ============================================================= */
-#navigation .menu-level-1 { display: flex; align-items: center; }
-#navigation .menu-level-1 .bt-nav-right { margin-left: auto; }
+@media (min-width: 992px) {
+  #navigation .menu-level-1 { display: flex; align-items: center; }
+  #navigation .menu-level-1 .bt-nav-right { margin-left: auto; }
+}
 #navigation .bt-dot {
   display: inline-block;
   width: 7px; height: 7px;
@@ -264,22 +273,25 @@
 }
 
 /* =============================================================
-   MENU — oprava pozadi
+   MENU — oprava pozadi (POUZE DESKTOP)
    Disco barvi pruh menu promennou --color-primary (u nas cerna
    pro tlacitka) -> cely pruh zcernal. Prebijeme natvrdo bilou.
+   Na mobilu má zásuvka menu vlastní pozadí v responsive.css.
    ============================================================= */
-#navigation,
-#navigation .navigation-in,
-#navigation .navigation-in.menu {
-  background: var(--bt-white) !important;
-}
-#navigation .menu-level-1 > li {
-  background: transparent !important;
-  border: 0 !important;
-}
-#navigation .menu-level-1 > li > a {
-  background: transparent !important;
-  color: var(--bt-black) !important;
+@media (min-width: 992px) {
+  #navigation,
+  #navigation .navigation-in,
+  #navigation .navigation-in.menu {
+    background: var(--bt-white) !important;
+  }
+  #navigation .menu-level-1 > li {
+    background: transparent !important;
+    border: 0 !important;
+  }
+  #navigation .menu-level-1 > li > a {
+    background: transparent !important;
+    color: var(--bt-black) !important;
+  }
 }
 
 /* =============================================================
@@ -296,8 +308,10 @@
    HEADER FIX BALIK v2 — 10 pripominek
    ============================================================= */
 
-/* (1) mezera pod menu kategorii */
-#navigation { padding-bottom: 10px !important; }
+/* (1) mezera pod menu kategorii — POUZE DESKTOP */
+@media (min-width: 992px) {
+  #navigation { padding-bottom: 10px !important; }
+}
 #navigation .menu-level-1 > li > a { padding-top: 20px; padding-bottom: 20px; }
 
 /* (2+6) top bar: vse na jedne rovine, jednotny vzhled */
