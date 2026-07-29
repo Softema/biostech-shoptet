@@ -1,0 +1,213 @@
+/* =============================================================
+   BIOS TECH — pages.css
+   Landing stránky Testovací jízda + Showroom Štoky (native Shoptet
+   "Stránky", byly úplně prázdné — jen H1 a žádný obsah).
+   ============================================================= */
+
+/* -------------------------------------------------------------
+   1) Skrýt nativní kostru, kterou nepotřebujeme (postranní panel
+      s kategoriemi, prázdná diskuze) a roztáhnout obsah na celou šířku
+   ------------------------------------------------------------- */
+body.in-testovaci-jizda .sidebar.sidebar-left,
+body.in-showroom-stoky .sidebar.sidebar-left,
+body.in-testovaci-jizda .discussionContainer,
+body.in-showroom-stoky .discussionContainer,
+body.in-testovaci-jizda h2.bt-hide-discussion,
+body.in-showroom-stoky h2.bt-hide-discussion,
+body.in-testovaci-jizda .add-comment,
+body.in-showroom-stoky .add-comment {
+  display: none !important;
+}
+body.in-testovaci-jizda main#content.narrow,
+body.in-showroom-stoky main#content.narrow {
+  width: 100% !important;
+  max-width: 100% !important;
+  float: none !important;
+  padding: 0 !important;
+}
+body.in-testovaci-jizda .content-wrapper-in,
+body.in-showroom-stoky .content-wrapper-in {
+  display: block !important;
+}
+body.in-testovaci-jizda article.pageArticleDetail header,
+body.in-showroom-stoky article.pageArticleDetail header {
+  position: absolute;
+  width: 1px; height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+} /* nativní H1 necháváme kvůli SEO/přístupnosti, jen vizuálně skryté — svůj vlastní H1 stavíme v obsahu */
+
+/* -------------------------------------------------------------
+   2) HERO
+   ------------------------------------------------------------- */
+.bt-scope-page .lp-hero {
+  background: var(--bt-black);
+  color: var(--bt-white);
+  padding: 72px 0 64px;
+  border-radius: 0 0 32px 32px;
+}
+.bt-scope-page .lp-hero .container { max-width: 900px; text-align: center; }
+.bt-scope-page .lp-hero .eyebrow { justify-content: center; color: var(--bt-pea); }
+.bt-scope-page .lp-hero h1 {
+  color: var(--bt-white);
+  font-size: clamp(32px, 5vw, 56px);
+  letter-spacing: -0.02em;
+  line-height: 1.05;
+  margin-top: 16px;
+}
+.bt-scope-page .lp-hero p {
+  color: var(--bt-chrome);
+  font-size: 17px;
+  max-width: 620px;
+  margin: 20px auto 0;
+  line-height: 1.55;
+}
+.bt-scope-page .lp-hero .lp-hero-ctas {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+/* -------------------------------------------------------------
+   3) INFO KARTY (adresa / hodiny / délka jízdy…)
+   ------------------------------------------------------------- */
+.bt-scope-page .lp-info-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: -32px 0 56px;
+  position: relative;
+  z-index: 1;
+}
+.bt-scope-page .lp-info-card {
+  background: var(--bt-white);
+  border: 1px solid var(--bt-line);
+  border-radius: var(--radius-lg);
+  padding: 24px;
+  box-shadow: 0 12px 32px -18px rgba(26,26,26,0.18);
+}
+.bt-scope-page .lp-info-card .lp-info-eyebrow {
+  font-size: 11px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: #8B8F95;
+}
+.bt-scope-page .lp-info-card .lp-info-main {
+  font-size: 22px; font-weight: 800; letter-spacing: -0.01em; margin-top: 6px;
+}
+.bt-scope-page .lp-info-card .lp-info-sub {
+  font-size: 13px; color: #6B6F75; margin-top: 6px;
+}
+
+/* -------------------------------------------------------------
+   4) KROKY (jak to probíhá)
+   ------------------------------------------------------------- */
+.bt-scope-page .lp-steps { padding: 64px 0; }
+.bt-scope-page .lp-steps .section-head { text-align: center; justify-content: center; flex-direction: column; align-items: center; }
+.bt-scope-page .lp-steps .eyebrow { justify-content: center; }
+.bt-scope-page .lp-steps h2 { margin-top: 12px; }
+.bt-scope-page .lp-steps-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+.bt-scope-page .lp-step {
+  text-align: center;
+  padding: 0 12px;
+}
+.bt-scope-page .lp-step .lp-step-num {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--bt-black);
+  color: var(--bt-pea);
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 16px;
+  margin-bottom: 16px;
+}
+.bt-scope-page .lp-step h3 { font-size: 17px; letter-spacing: -0.01em; }
+.bt-scope-page .lp-step p { font-size: 14px; color: #6B6F75; margin-top: 8px; line-height: 1.5; }
+
+/* -------------------------------------------------------------
+   5) FORMULÁŘ
+   ------------------------------------------------------------- */
+.bt-scope-page .lp-form-section { background: var(--bt-paper); padding: 64px 0 80px; }
+.bt-scope-page .lp-form-wrap {
+  max-width: 640px;
+  margin: 0 auto;
+  background: var(--bt-white);
+  border: 1px solid var(--bt-line);
+  border-radius: var(--radius-xl);
+  padding: 40px;
+}
+.bt-scope-page .lp-form-wrap h2 { font-size: 26px; letter-spacing: -0.01em; }
+.bt-scope-page .lp-form-wrap > p { color: #6B6F75; margin-top: 8px; font-size: 14px; }
+.bt-scope-page .lp-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 28px;
+}
+.bt-scope-page .lp-form-grid .lp-field-full { grid-column: 1 / -1; }
+.bt-scope-page .lp-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.bt-scope-page .lp-field input,
+.bt-scope-page .lp-field textarea,
+.bt-scope-page .lp-field select {
+  width: 100%;
+  font-family: inherit;
+  font-size: 15px;
+  padding: 12px 14px;
+  border: 1px solid var(--bt-line);
+  border-radius: var(--radius-md);
+  background: var(--bt-white);
+  box-sizing: border-box;
+}
+.bt-scope-page .lp-field input:focus,
+.bt-scope-page .lp-field textarea:focus,
+.bt-scope-page .lp-field select:focus {
+  outline: none;
+  border-color: var(--bt-black);
+}
+.bt-scope-page .lp-field textarea { resize: vertical; min-height: 90px; }
+.bt-scope-page .lp-form-wrap .btn { width: 100%; margin-top: 24px; height: 52px; }
+.bt-scope-page .lp-form-status {
+  margin-top: 16px;
+  font-size: 14px;
+  text-align: center;
+  display: none;
+}
+.bt-scope-page .lp-form-status.is-ok {
+  display: block;
+  color: var(--bt-pea-deep);
+  font-weight: 600;
+}
+.bt-scope-page .lp-form-status.is-error {
+  display: block;
+  color: #C4453A;
+  font-weight: 600;
+}
+.bt-scope-page .lp-form-note {
+  font-size: 12px;
+  color: #8B8F95;
+  text-align: center;
+  margin-top: 16px;
+}
+
+/* -------------------------------------------------------------
+   6) responzivita
+   ------------------------------------------------------------- */
+@media (max-width: 900px) {
+  .bt-scope-page .lp-info-grid { grid-template-columns: 1fr; margin-top: 24px; }
+  .bt-scope-page .lp-steps-grid { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 640px) {
+  .bt-scope-page .lp-hero { padding: 48px 0 40px; border-radius: 0 0 20px 20px; }
+  .bt-scope-page .lp-form-wrap { padding: 24px; border-radius: var(--radius-lg); }
+  .bt-scope-page .lp-form-grid { grid-template-columns: 1fr; }
+  .bt-scope-page .lp-hero-ctas .btn { width: 100%; }
+}
