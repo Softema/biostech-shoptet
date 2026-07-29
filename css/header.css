@@ -375,8 +375,12 @@
 /* jemne oddelovace mezi polozkami */
 .top-navigation-bar-menu li + li { border-left: 1px solid rgba(255,255,255,0.12) !important; }
 
-/* (4) vetsi logo */
-.bt-logo-img { height: 56px !important; max-width: 240px !important; }
+/* (4) vetsi logo — POUZE DESKTOP (na mobilu má logo vlastní menší
+   velikost v responsive.css; tohle bylo bez media query a s
+   !important, takže to přebilo i tu mobilní úpravu) */
+@media (min-width: 768px) {
+  .bt-logo-img { height: 56px !important; max-width: 240px !important; }
+}
 
 /* (5) "Zakaznicka podpora:" nesmi byt schovana */
 .top-navigation-contacts strong {
