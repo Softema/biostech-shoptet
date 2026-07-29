@@ -179,7 +179,16 @@
     margin: 0;
     padding: 0;
     gap: 4px;
+    /* 10 položek se na užších desktopových šířkách nevejde do řádku a
+       nativní "fitted" mechanismus Shoptetu (má přebytek schovat do
+       rozbalovacího "Více") to spolehlivě neřeší — místo spoléhání na
+       něj řádek nikdy nezalomíme, jen se v případě potřeby posune. */
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    scrollbar-width: none;
   }
+  #navigation .menu-level-1::-webkit-scrollbar { display: none; }
+  #navigation .menu-level-1 > li { flex-shrink: 0; }
   #navigation .menu-level-1 > li > a {
     display: inline-flex;
     align-items: center;
