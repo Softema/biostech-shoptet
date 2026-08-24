@@ -246,9 +246,9 @@
    ============================================================= */
 .bt-logo-img {
   display: block;
-  height: 40px;
+  height: 48px;
   width: auto;
-  max-width: 180px;
+  max-width: 210px;
   object-fit: contain;
 }
 
@@ -379,7 +379,7 @@
    velikost v responsive.css; tohle bylo bez media query a s
    !important, takže to přebilo i tu mobilní úpravu) */
 @media (min-width: 768px) {
-  .bt-logo-img { height: 56px !important; max-width: 240px !important; }
+  .bt-logo-img { height: 68px !important; max-width: 290px !important; }
 }
 
 /* (5) "Zakaznicka podpora:" nesmi byt schovana */
