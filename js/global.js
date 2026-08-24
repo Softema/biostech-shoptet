@@ -148,7 +148,8 @@
   }
 
   function init() {
-    replaceLogo();
+    // TEST: docasne vypnuto, overujeme nativni logo nahrane v Shoptetu
+    // replaceLogo();
     replaceFooter();
     upgradeTopBar();
     upgradeSearch();
