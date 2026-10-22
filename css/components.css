@@ -372,7 +372,7 @@
   transition: transform .2s;
 }
 .bt-scope .line-card:hover .line-arrow { transform: translateX(6px); }
-.bt-scope .line-card.line-ace .line-arrow { background: var(--ace-orange); color: var(--bt-white); }
+.bt-scope .line-card.line-ace .line-arrow { background: var(--bt-pea); color: var(--bt-black); }
 .bt-scope .line-card .line-deco {
   position: absolute;
   right: -40px;
@@ -1279,7 +1279,7 @@
 .bt-scope .line-card.line-ace .line-num {
   color: rgba(255,255,255,0.7);
 }
-.bt-scope .line-card.line-ace .line-num { color: var(--bt-orange, #f47b20); }
+.bt-scope .line-card.line-ace .line-num { color: var(--bt-pea); }
 
 /* Štítky na kartách — dvě různé příčiny useknutého textu, obě řešené tady:
    1) Dřívější `white-space: nowrap` držel dlouhé popisky ("Vlajková loď",

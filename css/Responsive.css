@@ -137,7 +137,7 @@
     padding: 12px 0 !important;
   }
   #header .site-name-wrapper { flex: 0 0 auto; }
-  #header .site-name img { max-height: 32px; width: auto; }
+  #header .site-name img { max-height: 44px; width: auto; }
   #header .search { display: none !important; }
   #header .navigation-buttons { flex: 0 0 auto; }
 

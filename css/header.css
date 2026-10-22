@@ -75,13 +75,18 @@
 @media (min-width: 768px) {
   #header .header-top {
     display: grid;
-    grid-template-columns: 220px 1fr auto;
+    grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: 32px;
     padding: 20px 0;
   }
 }
 #header .site-name img { display: block; }
+/* větší nativní logo (komentář klienta) — POUZE DESKTOP; mobil řeší
+   max-height v Responsive.css */
+@media (min-width: 768px) {
+  #header .site-name img { height: 80px; width: auto; max-width: 320px; }
+}
 
 #header .search {
   position: relative;
