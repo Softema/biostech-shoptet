@@ -57,6 +57,31 @@
       document.body.appendChild(wrap);
     }
     wireFooterLinks(wrap);
+    footerAccordion(wrap);
+  }
+
+  /* Mobil ≤768 px: sloupce patičky (Produkty, Showroom, Služby, Kontakt)
+     jako akordeon — nadpis je tlačítko, odkazy se rozbalí. Na desktopu
+     se nic nemění (CSS akordeonu platí jen na mobilu, klik se ignoruje). */
+  function footerAccordion(root) {
+    var mq = window.matchMedia ? window.matchMedia('(max-width: 768px)') : null;
+    root.querySelectorAll('.footer-grid > div:not(.footer-intro)').forEach(function (col) {
+      var h = col.querySelector('h4');
+      if (!h) return;
+      col.classList.add('bt-acc');
+      h.setAttribute('role', 'button');
+      h.setAttribute('tabindex', '0');
+      h.setAttribute('aria-expanded', 'false');
+      function toggle() {
+        if (!mq || !mq.matches) return;
+        var open = col.classList.toggle('is-open');
+        h.setAttribute('aria-expanded', open ? 'true' : 'false');
+      }
+      h.addEventListener('click', toggle);
+      h.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggle(); }
+      });
+    });
   }
 
 
@@ -83,6 +108,103 @@
         '<li><a href="/financovani/">Financování</a></li>' +
         '<li><a href="/testovaci-jizda/">Testovací jízda</a></li>';
     }
+  }
+
+  /* Mobil ≤768 px: nativní hamburger (v horní liště) přesuneme do řádku
+     hlavičky vedle loga — Shoptet ho obsluhuje přes .toggle-window, takže
+     funguje i po přesunu. Na širších šířkách ho vracíme zpět do lišty. */
+  function mobileBurger() {
+    var burger = document.querySelector('.responsive-tools a[data-target="navigation"]');
+    var tools = document.querySelector('.responsive-tools');
+    var headerTop = document.querySelector('#header .header-top');
+    if (!burger || !tools || !headerTop || !window.matchMedia) return;
+    var slot = document.createElement('div');
+    slot.className = 'bt-mh-burger';
+    var mq = window.matchMedia('(max-width: 768px)');
+    function place() {
+      if (mq.matches) {
+        if (!slot.parentNode) headerTop.insertBefore(slot, headerTop.firstChild);
+        slot.appendChild(burger);
+      } else {
+        tools.appendChild(burger);
+        if (slot.parentNode) slot.parentNode.removeChild(slot);
+      }
+    }
+    place();
+    if (mq.addEventListener) mq.addEventListener('change', place);
+    else if (mq.addListener) mq.addListener(place);
+  }
+
+  /* Mobilní zásuvka menu (≤768 px) — varianta A: otevírání/zavírání
+     dál řídí Shoptet (body.navigation-window-visible), my jen vložíme
+     do #navigation vlastní obsah podle návrhu. Nativní seznam se na
+     mobilu schová v Responsive.css, na desktopu je .bt-drawer skrytá. */
+  var SVG_ARROW = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  var SVG_ICON = {
+    pin: '<path d="M12 22s7-7 7-12a7 7 0 0 0-14 0c0 5 7 12 7 12Z"/><circle cx="12" cy="10" r="2.5"/>',
+    wheel: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2"/><path d="M12 14v7M10 12H3M14 12h7"/>',
+    wrench: '<path d="M14.7 6.3a4 4 0 0 0 5 5L21 13l-8 8-3-3 8-8-1.3-1.3a4 4 0 0 1-5-5L13 2l1.7 4.3Z"/>',
+    coin: '<circle cx="12" cy="12" r="9"/><path d="M15 9.5c-.5-1-1.6-1.5-3-1.5-1.7 0-3 .9-3 2s1.3 1.7 3 2 3 .9 3 2-1.3 2-3 2c-1.4 0-2.5-.5-3-1.5M12 6v2M12 16v2"/>',
+    user: '<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>',
+    phone: '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2Z"/>'
+  };
+  function icon(name, size) {
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + SVG_ICON[name] + '</svg>';
+  }
+  var DRAWER_ROWS = [
+    ['Malotraktory', 'Pro zahrady, sady a farmy', '/malotraktory/'],
+    ['Minibagry', 'Kompaktní zemní práce', '/minibagry/'],
+    ['Nakladače', 'Kolové a smykové', '/nakladace/'],
+    ['Příslušenství', 'Nářadí a nástavby', '/prislusenstvi/'],
+    ['ACE traktory', 'Vlajková řada · Centrála ČR', '/ace-profi/', true]
+  ];
+
+  function mobileDrawer() {
+    var nav = document.getElementById('navigation');
+    if (!nav || nav.querySelector('.bt-drawer')) return;
+    var logo = document.querySelector('#header .site-name img');
+    var account = nav.querySelector('.navigationActions a');
+    var accountHref = account ? account.getAttribute('href') : '/login/';
+
+    var rows = DRAWER_ROWS.map(function (r) {
+      return '<a class="bt-drawer-row" href="' + r[2] + '"><span class="bt-drawer-row-text">' +
+        '<b>' + r[0] + (r[3] ? '<i class="bt-drawer-ace-dot" aria-hidden="true"></i>' : '') + '</b>' +
+        '<small>' + r[1] + '</small></span>' + SVG_ARROW + '</a>';
+    }).join('');
+    var tiles = [
+      ['pin', 'Showroom Štoky', '/showroom-stoky/'],
+      ['wheel', 'Testovací jízda', '/testovaci-jizda/'],
+      ['wrench', 'Servis', '/servis/'],
+      ['coin', 'Financování', '/financovani/'],
+      ['user', 'Můj účet', accountHref]
+    ].map(function (t) {
+      return '<a class="bt-drawer-tile" href="' + t[2] + '">' + icon(t[0], 16) + '<span>' + t[1] + '</span></a>';
+    }).join('');
+
+    var drawer = document.createElement('div');
+    drawer.className = 'bt-drawer';
+    drawer.innerHTML =
+      '<div class="bt-drawer-head">' +
+        '<a href="/" class="bt-drawer-logo">' + (logo ? '<img src="' + logo.getAttribute('src') + '" alt="BiosTech">' : 'BiosTech') + '</a>' +
+        '<button type="button" class="bt-drawer-close" aria-label="Zavřít menu"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>' +
+      '</div>' +
+      '<div class="bt-drawer-body">' +
+        '<div class="bt-drawer-label">Stroje</div>' + rows +
+        '<div class="bt-drawer-tiles">' + tiles + '</div>' +
+      '</div>' +
+      '<div class="bt-drawer-foot">' +
+        '<div>Zákaznická podpora · Po–Pá 8:00–17:00</div>' +
+        '<a class="bt-drawer-call" href="tel:+420603123456">' + icon('phone', 18) + '<span>+420 603 123 456</span></a>' +
+        '<a class="bt-drawer-mail" href="mailto:showroom@biostech.cz">showroom@biostech.cz</a>' +
+      '</div>';
+    nav.insertBefore(drawer, nav.firstChild);
+
+    drawer.querySelector('.bt-drawer-close').addEventListener('click', function () {
+      // zavřít nativní cestou (Shoptet uklidí i svůj stav); pojistka třídou
+      var nativeClose = nav.querySelector('.navigation-close');
+      if (nativeClose) nativeClose.click();
+      document.body.classList.remove('navigation-window-visible');
+    });
   }
 
   function upgradeSearch() {
@@ -152,6 +274,8 @@
     replaceFooter();
     upgradeTopBar();
     upgradeSearch();
+    mobileBurger();
+    mobileDrawer();
     upgradeNav();
     watchMenuOverflow();
   }

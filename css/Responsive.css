@@ -334,3 +334,531 @@
     gap: 24px !important;
   }
 }
+
+/* =============================================================
+   8) MOBIL ≤768 px — HLAVIČKA PODLE NÁVRHU
+   Nativní mobilní hlavička Shoptetu (ums_mobile_header_v1) dává
+   logo a košík absolutně do horních 50 px — tam ale leží naše fixní
+   černá lišta, takže je obojí zakrývala. Lištu vracíme do toku
+   a řádek hlavičky skládáme sami: [hamburger] [logo] [košík],
+   pod tím vyhledávání. Hamburger do hlavičky přesouvá global.js
+   (.bt-mh-burger), na širších šířkách ho vrací zpět do lišty.
+   ============================================================= */
+@media (max-width: 768px) {
+  /* horní lišta: jen telefon na střed; v toku stránky, takže odpadá
+     i nativní odsazení obsahu pod fixní lištou */
+  .overall-wrapper { padding-top: 0 !important; }
+  .top-navigation-bar { position: static !important; transform: none !important; }
+  .top-navigation-bar .container {
+    justify-content: center;
+    padding-top: 8px !important;
+    padding-bottom: 8px !important;
+  }
+  .top-navigation-contacts {
+    flex: 0 1 auto;
+    justify-content: center;
+  }
+  .top-navigation-contacts strong,
+  .top-navigation-contacts .bt-topbar-email { display: none !important; }
+  .top-navigation-contacts .project-phone { display: inline-flex !important; margin: 0 !important; }
+  .top-navigation-contacts .project-phone span { display: inline !important; }
+  .top-navigation-tools { display: none !important; }
+
+  /* řádek hlavičky */
+  #header .header-top {
+    display: grid !important;
+    grid-template-columns: 44px 1fr auto;
+    grid-template-areas: "burger logo cart" "search search search";
+    align-items: center;
+    row-gap: 10px;
+    column-gap: 12px;
+    padding: 10px 0 12px !important;
+  }
+  #header .bt-mh-burger { grid-area: burger; display: flex; }
+  #header .site-name-wrapper {
+    grid-area: logo;
+    justify-self: center;
+    width: auto !important;
+    height: auto !important;
+  }
+  #header .site-name {
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+  }
+  #header .site-name a { display: block !important; height: auto !important; }
+  #header .site-name a img {
+    height: 36px !important;
+    width: auto !important;
+    max-height: 36px !important;
+    max-width: none !important;
+    padding: 0 !important;
+  }
+
+  /* hamburger: kruh 44 px */
+  #header .bt-mh-burger a {
+    position: static !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 44px !important;
+    height: 44px !important;
+    margin: 0 !important;
+    border-radius: 50%;
+    background: var(--bt-paper);
+    border: 1px solid var(--bt-line);
+    color: var(--bt-black);
+    font-size: 20px;
+    text-decoration: none;
+  }
+  /* ikona: nativní glyf visí na .responsive-tools > a, po přesunu
+     z lišty by zmizel — kreslíme vlastní (3 čáry, 20 px) */
+  #header .bt-mh-burger a::before {
+    content: "" !important;
+    display: block !important;
+    width: 20px;
+    height: 20px;
+    margin: 0 !important;
+    background: no-repeat center / 20px 20px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231A1A1A' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M4 7h16M4 12h16M4 17h16'/%3E%3C/svg%3E");
+  }
+
+  /* košík: kompaktní, vždy klikací */
+  #header .navigation-buttons {
+    grid-area: cart;
+    justify-self: end;
+    display: flex !important;
+    width: auto !important;
+    height: auto !important;
+  }
+  #header .navigation-buttons a.cart-count {
+    position: static !important;
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    height: 44px !important;
+    min-width: 44px;
+    padding: 0 12px !important;
+    margin: 0 !important;
+    border-radius: 100px;
+    background: var(--bt-black);
+    color: var(--bt-white);
+    z-index: 2;
+  }
+  #header .navigation-buttons a.cart-count::before {
+    content: "" !important;
+    display: block !important;
+    width: 20px;
+    height: 20px;
+    margin: 0 !important;
+    background: no-repeat center / 20px 20px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 7h12l-1 13H7L6 7Z'/%3E%3Cpath d='M9 7a3 3 0 0 1 6 0'/%3E%3C/svg%3E");
+    position: static !important;
+  }
+  #header .navigation-buttons a.cart-count .cart-price { display: none !important; }
+
+  /* vyhledávání přes celou šířku */
+  #header .search {
+    grid-area: search;
+    display: block !important;
+    position: static !important;
+    width: 100% !important;
+    padding: 0 !important;
+    box-shadow: none !important;
+  }
+  #header .search form {
+    height: 44px !important;
+    padding: 0 4px 0 16px !important;
+    border-radius: 100px !important;
+  }
+  #header .search input.search-input {
+    height: 42px !important;
+    padding: 0 44px 0 0 !important;
+    border: 0 !important;
+    background: transparent !important;
+    font-size: 15px !important; /* < 16px = iOS zoom; 15px dle návrhu */
+  }
+  #header .search .btn[data-testid="searchBtn"] {
+    right: 4px !important;
+    width: 36px !important;
+    height: 36px !important;
+    min-width: 36px;
+    padding: 0 !important;
+    border-radius: 50% !important;
+    font-size: 0 !important;
+    color: transparent !important;
+    background: var(--bt-black) no-repeat center / 16px 16px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.5-3.5'/%3E%3C/svg%3E") !important;
+  }
+}
+
+/* =============================================================
+   9) MOBIL ≤768 px — ZÁSUVKA MENU PODLE NÁVRHU
+   Otevírá/zavírá ji Shoptet (body.navigation-window-visible), obsah
+   (.bt-drawer) vkládá global.js. Nativní seznam kategorií se tu
+   neukazuje, platí jen na desktopu.
+   ============================================================= */
+@media (min-width: 769px) {
+  .bt-drawer { display: none !important; }
+}
+@media (max-width: 768px) {
+  body:not(.navigation-window-visible) #navigation { display: none !important; }
+  body.navigation-window-visible { overflow: hidden !important; }
+  /* zásuvka je uvnitř #header (z-index 50) — při otevření musí celá
+     hlavička nad horní lištu, jinak lišta prosvítá přes hlavičku zásuvky */
+  body.navigation-window-visible #header { z-index: 1000 !important; }
+  body.navigation-window-visible .top-navigation-bar { visibility: hidden !important; }
+  body.navigation-window-visible #navigation {
+    display: block !important;
+    position: fixed !important;
+    inset: 0 !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    max-width: none !important;
+    height: 100% !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: var(--bt-white) !important;
+    overflow-x: hidden !important;
+    overflow-y: auto !important;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    z-index: 1000 !important;
+    transform: none !important;
+  }
+  /* specificita musí přebít starší `.navigation-window-visible #navigation
+     .navigation-in.menu { display: block !important }` z bloku 1) */
+  body.navigation-window-visible #navigation > .navigation-in.menu,
+  body.navigation-window-visible #navigation > .navigation-close { display: none !important; }
+
+  .bt-drawer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    animation: btDrawerIn .22s ease-out both;
+  }
+  @keyframes btDrawerIn {
+    from { opacity: 0; transform: translateX(-16px); }
+    to   { opacity: 1; transform: none; }
+  }
+
+  .bt-drawer-head {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background: var(--bt-white);
+    border-bottom: 1px solid var(--bt-line);
+  }
+  .bt-drawer-logo img { display: block; height: 36px; width: auto; }
+  .bt-drawer-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--bt-black);
+    color: var(--bt-white);
+    cursor: pointer;
+  }
+
+  .bt-drawer-body { flex: 1 0 auto; padding: 8px 20px 28px; }
+  .bt-drawer-label {
+    margin: 20px 0 4px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: #6B6F75;
+  }
+  .bt-drawer-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 64px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--bt-line);
+    color: var(--bt-black);
+    text-decoration: none;
+  }
+  .bt-drawer-row:hover { color: var(--bt-black); }
+  .bt-drawer-row svg { flex-shrink: 0; }
+  .bt-drawer-row-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .bt-drawer-row b {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+  .bt-drawer-row small { font-size: 13px; color: #6B6F75; line-height: 1.3; }
+  .bt-drawer-ace-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--ace-orange);
+  }
+
+  .bt-drawer-tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 24px;
+  }
+  .bt-drawer-tile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 52px;
+    padding: 0 14px;
+    border-radius: 12px;
+    background: var(--bt-paper);
+    color: var(--bt-black);
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    text-decoration: none;
+  }
+  .bt-drawer-tile:hover { color: var(--bt-black); }
+  .bt-drawer-tile svg { flex-shrink: 0; }
+
+  .bt-drawer-foot {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 24px 20px 28px;
+    background: var(--bt-black);
+    color: var(--bt-chrome);
+    font-size: 13px;
+  }
+  .bt-drawer-call {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 52px;
+    border-radius: 100px;
+    background: var(--bt-pea);
+    color: var(--bt-black);
+    font-size: 15px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .bt-drawer-call:hover { color: var(--bt-black); background: var(--bt-pea-bright); }
+  .bt-drawer-mail { color: var(--bt-chrome); text-align: center; text-decoration: none; }
+  .bt-drawer-mail:hover { color: var(--bt-white); }
+}
+
+/* =============================================================
+   10) MOBIL ≤768 px — HOMEPAGE PODLE NÁVRHU
+   Háčky = třídy bt-* v MARKUP (homepage.js). Prototyp má inline
+   styly, proto !important.
+   ============================================================= */
+@media (max-width: 768px) {
+  #bt-homepage .container { padding-left: 20px !important; padding-right: 20px !important; }
+  #bt-homepage .section,
+  #bt-homepage .bt-sec-ace,
+  #bt-homepage .bt-sec-values { padding-top: 56px !important; padding-bottom: 56px !important; }
+  #bt-homepage .section-tight { padding-top: 48px !important; padding-bottom: 48px !important; }
+  #bt-homepage .section-head { margin-bottom: 24px !important; gap: 12px; }
+  #bt-homepage h2 { font-size: 32px !important; }
+
+  /* hero */
+  #bt-homepage .bt-hero-in {
+    grid-template-columns: 1fr !important;
+    gap: 0 !important;
+    min-height: 0 !important;
+    padding: 44px 20px 36px !important;
+  }
+  #bt-homepage .hero-split h1 { font-size: 48px !important; line-height: .95 !important; }
+  #bt-homepage .hero-split p { font-size: 16px !important; }
+  #bt-homepage .bt-hero-btns {
+    flex-direction: column;
+    flex-wrap: nowrap !important;
+    margin-top: 28px !important;
+  }
+  #bt-homepage .bt-hero-btns .btn { width: 100%; padding: 16px 20px !important; }
+  #bt-homepage .bt-hero-stats {
+    justify-content: space-between;
+    flex-wrap: nowrap !important;
+    gap: 12px !important;
+    margin-top: 32px !important;
+    font-size: 12px !important;
+  }
+  #bt-homepage .bt-hero-stats > div > div { font-size: 24px !important; }
+  #bt-homepage .bt-hero-visual { height: 240px !important; margin-top: 24px; }
+  #bt-homepage .bt-hero-visual > div[style*="height: 70%"] { height: 100% !important; }
+  #bt-homepage .bt-hero-ring { width: 220px !important; height: 220px !important; }
+  /* štítky zůstávají přes obrázek (blok 2) je jinak dá do toku) */
+  #bt-homepage .bt-hero-visual .bt-hero-badge {
+    position: absolute !important;
+    margin-top: 0 !important;
+    transform: scale(.88);
+    z-index: 2;
+  }
+  #bt-homepage .bt-hero-visual .bt-hero-badge:not(.bt-hero-badge-left) { right: 0 !important; top: 0 !important; transform-origin: top right; text-align: left !important; }
+  #bt-homepage .bt-hero-visual .bt-hero-badge-left { left: 0 !important; bottom: 0 !important; transform-origin: bottom left; }
+
+  /* benefity 2 sloupce, karty oblastí pod sebou */
+  #bt-homepage .bt-benefits { grid-template-columns: 1fr 1fr !important; }
+  #bt-homepage .line-grid { grid-template-columns: 1fr !important; }
+
+  /* top produkty + ACE produkty: vodorovný posuvník */
+  #bt-homepage .bt-top-products,
+  #bt-homepage .bt-ace-grid {
+    display: grid !important;
+    grid-template-columns: none !important;
+    grid-auto-flow: column;
+    grid-auto-columns: 80%;
+    gap: 12px !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding: 0 20px;
+    margin: 0 -20px !important;
+    padding: 0 20px 8px !important;
+    scrollbar-width: none;
+  }
+  #bt-homepage .bt-top-products::-webkit-scrollbar,
+  #bt-homepage .bt-ace-grid::-webkit-scrollbar { display: none; }
+  #bt-homepage .bt-top-products > *,
+  #bt-homepage .bt-ace-grid > * { scroll-snap-align: start; min-width: 0; }
+
+  /* ACE sekce */
+  #bt-homepage .bt-ace-head { grid-template-columns: 1fr !important; gap: 28px !important; }
+  #bt-homepage .bt-ace-title { font-size: 42px !important; }
+  #bt-homepage .bt-ace-hero {
+    position: relative !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px !important;
+    padding: 24px !important;
+  }
+  #bt-homepage .bt-ace-hero .bt-ace-hero-imgwrap { height: 200px !important; }
+  #bt-homepage .bt-ace-hero img { height: 100% !important; max-height: 200px; }
+  #bt-homepage .bt-ace-hero .bt-ace-hero-badge,
+  #bt-homepage .bt-ace-hero .bt-ace-hero-namebox,
+  #bt-homepage .bt-ace-hero .bt-ace-hero-pricebox {
+    position: absolute !important;
+    margin-top: 0 !important;
+  }
+  #bt-homepage .bt-ace-hero .bt-ace-hero-badge { left: 20px !important; top: 20px !important; }
+  #bt-homepage .bt-ace-hero .bt-ace-hero-namebox { left: 20px !important; bottom: 20px !important; }
+  #bt-homepage .bt-ace-hero .bt-ace-hero-pricebox { right: 20px !important; top: 20px !important; bottom: auto !important; text-align: right !important; }
+  #bt-homepage .bt-ace-hero .bt-ace-hero-name,
+  #bt-homepage .bt-ace-hero .bt-ace-hero-price { font-size: 20px !important; }
+  #bt-homepage .bt-ace-hero .bt-ace-hero-od { display: none !important; }
+
+  /* showroom box */
+  #bt-homepage .bt-showroom-box {
+    grid-template-columns: 1fr !important;
+    gap: 28px !important;
+    padding: 28px 20px !important;
+  }
+  #bt-homepage .bt-showroom-title { font-size: 32px !important; }
+  #bt-homepage .bt-showroom-btns { flex-wrap: nowrap !important; }
+  #bt-homepage .bt-showroom-btns .btn { flex: 1 1 0; width: auto; min-width: 0; }
+
+  /* Co děláme: 4 hodnoty 2×2 */
+  #bt-homepage .bt-values {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px 16px !important;
+    margin-top: 36px !important;
+  }
+}
+
+/* =============================================================
+   11) MOBIL ≤768 px — PATIČKA PODLE NÁVRHU
+   Sloupce = akordeon (.bt-acc, .is-open přidává global.js).
+   ============================================================= */
+@media (max-width: 768px) {
+  .bt-scope footer.site-footer { padding: 40px 0 24px; }
+  .bt-scope footer.site-footer .container { padding-left: 20px !important; padding-right: 20px !important; }
+  .bt-scope .footer-grid {
+    display: block !important;
+    padding-bottom: 0;
+    border-bottom: 0;
+  }
+  .bt-scope .footer-intro {
+    padding-bottom: 28px;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .bt-scope .footer-intro p { max-width: none; }
+  .bt-scope .footer-newsletter { max-width: none; }
+  .bt-scope .footer-newsletter input { font-size: 15px; min-width: 0; }
+  .bt-scope .footer-newsletter button { height: 44px; padding: 0 20px; }
+
+  .bt-scope .footer-grid .bt-acc { border-bottom: 1px solid rgba(255,255,255,.08); }
+  .bt-scope footer.site-footer .bt-acc h4 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 56px;
+    margin: 0;
+    cursor: pointer;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .bt-scope footer.site-footer .bt-acc h4::after {
+    content: "";
+    width: 12px;
+    height: 12px;
+    flex-shrink: 0;
+    background: no-repeat center / 12px 12px url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' stroke='%238BC53F' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 6h10M6 1v10'/%3E%3C/svg%3E");
+  }
+  .bt-scope footer.site-footer .bt-acc.is-open h4::after {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' stroke='%238BC53F' stroke-width='2' stroke-linecap='round'%3E%3Cpath d='M1 6h10'/%3E%3C/svg%3E");
+  }
+  .bt-scope footer.site-footer .bt-acc a { display: none; }
+  .bt-scope footer.site-footer .bt-acc.is-open { padding-bottom: 16px; }
+  .bt-scope footer.site-footer .bt-acc.is-open a {
+    display: block;
+    padding: 10px 0;
+    font-size: 15px;
+  }
+
+  .bt-scope .footer-bottom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding-top: 20px;
+  }
+  .bt-scope .footer-bottom .pay-row { flex-wrap: wrap; }
+}
+
+/* =============================================================
+   12) MOBIL ≤768 px — KATEGORIE, DETAIL, KOŠÍK (jen opravy)
+   ============================================================= */
+@media (max-width: 768px) {
+  /* kategorie: produkty v 1 sloupci, klikací plochy min. 44 px */
+  .bt-scope .category-products .products,
+  body.type-category .bt-scope .products { grid-template-columns: 1fr !important; }
+  .bt-scope .price-range input { height: 44px; padding: 0 12px; font-size: 15px; }
+  .bt-scope .category-toolbar #bt-sort { height: 44px; font-size: 15px; }
+  .bt-scope .category-toolbar .view-toggle button { width: 44px; height: 44px; }
+  .bt-scope .product-card .product-foot .add-to-cart-button,
+  .bt-scope .product-card .product-foot .add-btn { width: 44px !important; height: 44px !important; min-width: 44px; }
+
+  /* detail: drobečková navigace u kraje, náhledy fotek nesmí mít šířku
+     celého sloupce (v řádku se z nich stávaly obří obrázky) */
+  body.type-detail .breadcrumbs-wrapper { padding: 16px 20px 0 !important; }
+  /* ikona domečku se překrývala s textem "Domů" */
+  body.type-detail .breadcrumbs .navigation-home-icon { padding-left: 0 !important; }
+  body.type-detail .breadcrumbs .navigation-home-icon::before { display: none !important; }
+  .bt-scope-detail .p-thumbs { gap: 8px; padding-right: 0; }
+  .bt-scope-detail .p-thumbs .p-thumb { width: 72px; flex: 0 0 72px; }
+  /* box Testovací jízda: tlačítko pod text, ať se text nemačká */
+  .bt-scope-detail .p-testdrive-box { flex-wrap: wrap; }
+  .bt-scope-detail .p-testdrive-box .txt { flex: 1 1 calc(100% - 64px); min-width: 0; }
+  .bt-scope-detail .p-testdrive-box .btn,
+  .bt-scope-detail .p-testdrive-box a,
+  .bt-scope-detail .p-testdrive-box button { flex: 1 1 100%; min-height: 44px; }
+}
