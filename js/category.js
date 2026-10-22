@@ -222,6 +222,25 @@
       '<a class="btn btn-ghost" style="width:100%;margin-top:16px;" href="/' + esc(CUR) + '/">Resetovat filtry</a>';
   }
 
+  /* Mobil ≤768 px: filtry sbalené pod tlačítkem "Filtry" (na desktopu
+     tlačítko schované a filtry vždy vidět — viz Responsive.css). Aktivní
+     filtry jsou vidět i sbalené (štítky v toolbaru nad produkty). */
+  function filterToggle(aside) {
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'bt-filter-toggle';
+    btn.setAttribute('aria-expanded', 'false');
+    btn.innerHTML = '<span><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>Filtry</span>' +
+      '<svg class="bt-filter-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
+    aside.insertBefore(btn, aside.firstChild);
+    function set(open) {
+      aside.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    }
+    set(false);
+    btn.addEventListener('click', function () { set(!aside.classList.contains('is-open')); });
+  }
+
   function wireSidebar(aside) {
     // navigace klikem na linii/kategorii
     aside.querySelectorAll('[data-nav-slug]').forEach(function (opt) {
@@ -571,6 +590,7 @@
     document.querySelectorAll('.pagination').forEach(function (el) { el.style.display = 'none'; });
 
     wireSidebar(aside);
+    filterToggle(aside);
     wireToolbar(col);
     fillCounts(aside);
   }

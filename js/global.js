@@ -135,8 +135,17 @@
     else if (mq.addListener) mq.addListener(place);
 
     // ikona košíku na mobilu rovnou na stránku košíku — nativní rychlý
-    // náhled (cart-widget) je na mobilu nenastylovaný a nejde zavřít
+    // náhled (cart-widget) je na mobilu nenastylovaný a nejde zavřít.
+    // Shoptet ho otevírá přes třídu .toggle-window, tak ji na mobilu
+    // odebereme (obyčejný odkaz na /kosik/) a na desktopu vrátíme.
     var cart = document.querySelector('#header a.cart-count');
+    function cartMode() {
+      if (!cart) return;
+      cart.classList.toggle('toggle-window', !mq.matches);
+    }
+    cartMode();
+    if (mq.addEventListener) mq.addEventListener('change', cartMode);
+    else if (mq.addListener) mq.addListener(cartMode);
     if (cart) {
       cart.addEventListener('click', function (e) {
         if (!mq.matches) return;

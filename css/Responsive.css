@@ -852,6 +852,15 @@
      celého sloupce (v řádku se z nich stávaly obří obrázky) */
   /* košík: obsah nesmí sahat až k okraji displeje */
   #bt-cart-root { padding-left: 20px; padding-right: 20px; }
+  /* řádek položky: 3. sloupec se roztahoval podle ceny (110 px) a název
+     produktu se mačkal do ~110 px — čtyři sloupce, křížek má vlastní úzký */
+  .bt-scope-cart .cart-row {
+    grid-template-columns: 72px minmax(0, 1fr) auto 36px !important;
+    grid-template-areas:
+      "img info info remove"
+      "qty qty price price" !important;
+  }
+  .bt-scope-cart .cart-row .ci-remove-slot { justify-self: end; align-self: start; }
 
   body.type-detail .breadcrumbs-wrapper { padding: 16px 20px 0 !important; }
   /* ikona domečku (kreslí ji .navigation-home-icon-wrapper::before, ne
@@ -871,4 +880,39 @@
   .bt-scope-detail .p-testdrive-box .btn,
   .bt-scope-detail .p-testdrive-box a,
   .bt-scope-detail .p-testdrive-box button { flex: 1 1 100%; min-height: 44px; }
+}
+
+/* =============================================================
+   13) MOBIL ≤768 px — SKLÁDACÍ FILTRY V KATEGORII
+   Tlačítko .bt-filter-toggle vkládá category.js; na desktopu skryté.
+   ============================================================= */
+@media (min-width: 769px) {
+  .bt-filter-toggle { display: none !important; }
+  /* tlačítko je první v panelu — první blok filtrů musí zůstat bez
+     horního odsazení jako dřív (.filter-block:first-child) */
+  .bt-scope .sidebar-filters > .bt-filter-toggle + .filter-block { padding-top: 0; }
+}
+@media (max-width: 768px) {
+  .bt-scope .bt-filter-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    min-height: 48px;
+    padding: 0 18px;
+    border: 1px solid var(--bt-line);
+    border-radius: 100px;
+    background: var(--bt-white);
+    color: var(--bt-black);
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .bt-scope .bt-filter-toggle > span { display: inline-flex; align-items: center; gap: 10px; }
+  .bt-scope .bt-filter-chevron { transition: transform .2s; }
+  .bt-scope .sidebar-filters.is-open .bt-filter-chevron { transform: rotate(180deg); }
+  .bt-scope .sidebar-filters:not(.is-open) > :not(.bt-filter-toggle) { display: none !important; }
+  .bt-scope .sidebar-filters.is-open .bt-filter-toggle { margin-bottom: 8px; }
+  .bt-scope .category-layout { gap: 16px; }
 }
