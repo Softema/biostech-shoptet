@@ -133,6 +133,18 @@
     place();
     if (mq.addEventListener) mq.addEventListener('change', place);
     else if (mq.addListener) mq.addListener(place);
+
+    // ikona košíku na mobilu rovnou na stránku košíku — nativní rychlý
+    // náhled (cart-widget) je na mobilu nenastylovaný a nejde zavřít
+    var cart = document.querySelector('#header a.cart-count');
+    if (cart) {
+      cart.addEventListener('click', function (e) {
+        if (!mq.matches) return;
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        location.href = cart.getAttribute('href') || '/kosik/';
+      }, true);
+    }
   }
 
   /* Mobilní zásuvka menu (≤768 px) — varianta A: otevírání/zavírání
