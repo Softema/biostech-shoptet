@@ -382,6 +382,7 @@
     height: auto !important;
   }
   #header .site-name {
+    display: block !important; /* v objednávce ho Shoptet na mobilu schovává */
     position: static !important;
     width: auto !important;
     height: auto !important;
@@ -849,6 +850,9 @@
 
   /* detail: drobečková navigace u kraje, náhledy fotek nesmí mít šířku
      celého sloupce (v řádku se z nich stávaly obří obrázky) */
+  /* košík: obsah nesmí sahat až k okraji displeje */
+  #bt-cart-root { padding-left: 20px; padding-right: 20px; }
+
   body.type-detail .breadcrumbs-wrapper { padding: 16px 20px 0 !important; }
   /* ikona domečku se překrývala s textem "Domů" */
   body.type-detail .breadcrumbs .navigation-home-icon { padding-left: 0 !important; }

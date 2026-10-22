@@ -213,6 +213,14 @@ html.bt-on-cart body.ordering-process .row.cart-row > [class*="col-"] {
 .bt-scope-cart .cart-related .section-head { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px; }
 .bt-scope-cart .cart-related h3 { font-size: 24px; margin-top: 8px; }
 .bt-scope-cart .cart-related .products { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+/* POJISTKA proti úniku absolutního overlaye karty (viz cart.js buildRelated):
+   .product-image MUSÍ být position:relative s vlastní výškou */
+.bt-scope-cart .cart-related .product-card { position: relative; }
+.bt-scope-cart .cart-related .product-card .product-image {
+  position: relative !important;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+}
 @media (max-width: 640px) { .bt-scope-cart .cart-related .products { grid-template-columns: 1fr; } }
 
 /* -------------------------------------------------------------

@@ -169,7 +169,11 @@
      ----------------------------------------------------------- */
   function buildRelated(root) {
     var section = document.createElement('div');
-    section.className = 'cart-related';
+    // + bt-scope: karty potřebují styly .product-card z components.css
+    // (hlavně .product-image{position:relative}) — bez nich se obrázkový
+    // <a style="position:absolute;inset:0"> ukotvil k dokumentu a fotka
+    // doplňku se roztáhla přes celý košík (stejná chyba jako dřív na detailu)
+    section.className = 'cart-related bt-scope';
     section.innerHTML = '<div class="section-head"><div><span class="eyebrow">Mohlo by se hodit</span><h3>Příslušenství a doplňky</h3></div></div><div class="products"></div>';
     var grid = section.querySelector('.products');
 
