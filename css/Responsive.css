@@ -854,9 +854,15 @@
   #bt-cart-root { padding-left: 20px; padding-right: 20px; }
 
   body.type-detail .breadcrumbs-wrapper { padding: 16px 20px 0 !important; }
-  /* ikona domečku se překrývala s textem "Domů" */
+  /* ikona domečku (kreslí ji .navigation-home-icon-wrapper::before, ne
+     odkaz) se překrývala s textem "Domů"; oddělovače "/" nativně schované,
+     takže položky splývaly */
   body.type-detail .breadcrumbs .navigation-home-icon { padding-left: 0 !important; }
-  body.type-detail .breadcrumbs .navigation-home-icon::before { display: none !important; }
+  body.type-detail .breadcrumbs.navigation-home-icon-wrapper::before { display: none !important; }
+  body.type-detail .breadcrumbs .navigation-bullet { display: inline !important; margin-left: 6px; }
+  body.type-detail .breadcrumbs { row-gap: 4px !important; }
+  /* nativní štítek (Akce) pod drobečkovou navigací zarovnat s ní */
+  body.type-detail .flags.flags-default.flags-inline { margin: 8px 10px 0; }
   .bt-scope-detail .p-thumbs { gap: 8px; padding-right: 0; }
   .bt-scope-detail .p-thumbs .p-thumb { width: 72px; flex: 0 0 72px; }
   /* box Testovací jízda: tlačítko pod text, ať se text nemačká */
