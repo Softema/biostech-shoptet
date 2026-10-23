@@ -228,6 +228,85 @@
     });
   }
 
+  /* Desktop: rychlý náhled košíku po najetí (nativní #cart-widget) podle
+     návrhu — hlavička s počtem položek, řádky produktů, doprava zdarma,
+     celková cena a dvě tlačítka. Obsah Shoptet načítá AJAXem a při každé
+     změně ho přepíše, proto doplňujeme po ShoptetDOMCartContentLoaded.
+     Panel ukotvíme pod tlačítko košíku (hlavička je přilepená). */
+  function cartWidget() {
+    var w = document.getElementById('cart-widget');
+    var btn = document.querySelector('#header a.cart-count');
+    if (!w || !btn || !window.matchMedia) return;
+    var desk = window.matchMedia('(min-width: 769px)');
+
+    function place() {
+      if (!desk.matches) return;
+      var r = btn.getBoundingClientRect();
+      w.style.setProperty('--bt-cw-top', Math.round(r.bottom + 12) + 'px');
+      w.style.setProperty('--bt-cw-right', Math.round(document.documentElement.clientWidth - r.right) + 'px');
+    }
+    btn.addEventListener('mouseenter', place);
+    window.addEventListener('scroll', place, { passive: true });
+    window.addEventListener('resize', place);
+    place();
+
+    // tlačítka jsou mimo AJAXem přepisovanou část — stačí jednou
+    var bw = w.querySelector('.cart-widget-button');
+    var cont = bw && bw.querySelector('#continue-order-button');
+    if (cont && !bw.querySelector('.bt-cw-checkout')) {
+      cont.textContent = 'Do košíku';
+      cont.classList.add('bt-cw-btn');
+      bw.insertAdjacentHTML('beforeend',
+        '<a href="/objednavka/krok-1/" class="bt-cw-btn bt-cw-checkout" rel="nofollow">K pokladně ' +
+        '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>');
+    }
+
+    function polozky(n) {
+      if (n === 1) return '1 položka';
+      if (n >= 2 && n <= 4) return n + ' položky';
+      return n + ' položek';
+    }
+
+    function enhance() {
+      var inner = w.querySelector('.cart-widget-inner');
+      if (!inner || inner.querySelector('.bt-cw-head')) return;
+      var prods = inner.querySelectorAll('.cart-widget-product');
+      if (!prods.length) return;
+
+      inner.insertAdjacentHTML('afterbegin',
+        '<div class="bt-cw-head"><strong>Košík</strong><span>' + polozky(prods.length) + '</span></div>');
+
+      prods.forEach(function (p) {
+        var amount = p.querySelector('input.amount');
+        var name = p.querySelector('.cart-widget-product-name');
+        var price = p.querySelector('[data-testid="cartWidgetProductPrice"]');
+        var del = p.querySelector('.cart-widget-product-delete');
+        if (name && amount) {
+          name.insertAdjacentHTML('beforeend', '<span class="bt-cw-meta">' + (amount.value || '1') + ' ks</span>');
+        }
+        if (price && del) {
+          price.classList.add('bt-cw-price');
+          del.insertBefore(price, del.firstChild);
+        }
+      });
+
+      var ship = inner.querySelector('.cart-free-shipping');
+      if (ship && /zdarma!/i.test(ship.textContent)) {
+        ship.insertAdjacentHTML('beforeend', '<span class="bt-cw-bar"><i></i></span>');
+      }
+
+      // celková cena = cena v tlačítku košíku (Shoptet ji drží aktuální)
+      var total = document.querySelector('#header .cart-price');
+      var totalText = total ? total.textContent.replace(/\s+/g, ' ').trim() : '';
+      if (totalText) {
+        inner.insertAdjacentHTML('beforeend',
+          '<div class="bt-cw-total"><span>Celkem s DPH</span><strong>' + totalText + '</strong></div>');
+      }
+    }
+    enhance();
+    document.addEventListener('ShoptetDOMCartContentLoaded', enhance);
+  }
+
   function upgradeSearch() {
     var input = document.querySelector('#header input.search-input');
     if (input) input.placeholder = 'Hledejte traktor, minibagr, nakladač…';
@@ -297,6 +376,7 @@
     upgradeSearch();
     mobileBurger();
     mobileDrawer();
+    cartWidget();
     upgradeNav();
     watchMenuOverflow();
   }
