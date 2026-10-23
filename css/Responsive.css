@@ -694,9 +694,23 @@
     font-size: 12px !important;
   }
   #bt-homepage .bt-hero-stats > div > div { font-size: 24px !important; }
-  #bt-homepage .bt-hero-visual { height: 240px !important; margin-top: 24px; }
-  #bt-homepage .bt-hero-visual > div[style*="height: 70%"] { height: 100% !important; }
-  #bt-homepage .bt-hero-ring { width: 220px !important; height: 220px !important; }
+  /* fotka pro mobil (traktor dole, nahoře tmavé nebe pod text) ukotvená
+     ke spodku sekce; .bt-hero-visual je průhledná plocha přes traktor,
+     na které leží štítky. Výška fotky max. 640 px, ať na 768 px traktor
+     nepřeroste; okraje fotky mají stejnou barvu jako pozadí (#141414). */
+  /* 1. vrstva = boční přechod do pozadí přesně přes fotku (fotka má poměr
+     1080:1600 → šířka = výška × 0,675), aby na širších mobilech nebyly
+     vidět její okraje */
+  #bt-homepage .hero-split {
+    background:
+      linear-gradient(90deg, #141414 0%, rgba(20,20,20,0) 14%, rgba(20,20,20,0) 86%, #141414 100%) center bottom / min(101.25vw, 432px) min(150vw, 640px) no-repeat,
+      url('https://cdn.jsdelivr.net/gh/Softema/biostech-shoptet@main/img/hero-mobil.webp') center bottom / auto min(150vw, 640px) no-repeat,
+      #141414 !important;
+  }
+  #bt-homepage .bt-hero-visual {
+    height: calc(min(150vw, 640px) * .55) !important;
+    margin-top: 24px;
+  }
   /* štítky zůstávají přes obrázek (blok 2) je jinak dá do toku) */
   #bt-homepage .bt-hero-visual .bt-hero-badge {
     position: absolute !important;

@@ -1244,7 +1244,9 @@
    ============================================================= */
 .bt-scope .hero-split > .container {
   display: grid !important;
-  grid-template-columns: 1fr 1fr !important;
+  /* text dostane víc místa — traktor je teď fotka v pozadí sekce,
+     pravý sloupec nese jen štítky */
+  grid-template-columns: 1.2fr 0.8fr !important;
 }
 @media (max-width: 900px) {
   .bt-scope .hero-split > .container {
